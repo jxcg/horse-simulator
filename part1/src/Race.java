@@ -20,12 +20,12 @@ public class Race {
      *
      * @param distance the length of the racetrack (in metres/yards...)
      */
-    public Race(int distance) {
+    public Race(int distance, Horse a, Horse b, Horse c) {
         // initialise instance variables
         raceLength = distance;
-        lane1Horse = null;
-        lane2Horse = null;
-        lane3Horse = null;
+        lane1Horse = a;
+        lane2Horse = b;
+        lane3Horse = c;
     }
 
     /**
@@ -78,7 +78,9 @@ public class Race {
             //wait for 100 milliseconds
             try{
                 TimeUnit.MILLISECONDS.sleep(100);
-            } catch(Exception e){}
+            } catch(Exception e){
+
+            }
         }
     }
 
@@ -93,7 +95,7 @@ public class Race {
         //if the horse has fallen it cannot move,
         //so only run if it has not fallen
 
-        if  (!theHorse.hasFallen()) {
+        if (!theHorse.hasFallen()) {
             //the probability that the horse will move forward depends on the confidence;
             if (Math.random() < theHorse.getConfidence()) {
                 theHorse.moveForward();
