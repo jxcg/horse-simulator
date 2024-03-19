@@ -134,13 +134,13 @@ public class Race {
         System.out.println();
 
         printLane(lane1Horse);
-        System.out.println();
+        System.out.println(" " + lane1Horse.getName() + " (Current confidence: " +lane1Horse.getConfidence() + ")");
 
         printLane(lane2Horse);
-        System.out.println();
+        System.out.println(" " + lane2Horse.getName());
 
         printLane(lane3Horse);
-        System.out.println();
+        System.out.println(" " + lane3Horse.getName());
 
         multiplePrint('=',raceLength+3); //bottom edge of track
         System.out.println();
@@ -167,7 +167,7 @@ public class Race {
         //if the horse has fallen then print dead
         //else print the horse's symbol
         if(theHorse.hasFallen()) {
-            System.out.print('\u2322');
+            System.out.print('❌');
         } else {
             System.out.print(theHorse.getSymbol());
         }
@@ -176,7 +176,7 @@ public class Race {
         multiplePrint(' ',spacesAfter);
 
         //print the | for the end of the track
-        System.out.print('|');
+        System.out.print("|");
     }
 
 
