@@ -20,12 +20,12 @@ public class Race {
      *
      * @param distance the length of the racetrack (in metres/yards...)
      */
-    public Race(int distance, Horse a, Horse b, Horse c) {
+    public Race(int distance) {
         // initialise instance variables
         raceLength = distance;
-        lane1Horse = a;
-        lane2Horse = b;
-        lane3Horse = c;
+        lane1Horse = null;
+        lane2Horse = null;
+        lane3Horse = null;
     }
 
     /**
@@ -71,14 +71,23 @@ public class Race {
             printRace();
 
             //if any of the three horses has won the race is finished
-            if ( raceWonBy(lane1Horse) || raceWonBy(lane2Horse) || raceWonBy(lane3Horse) ) {
+            if (raceWonBy(lane1Horse) || raceWonBy(lane2Horse) || raceWonBy(lane3Horse)) {
                 finished = true;
+                if (raceWonBy(lane1Horse)) {
+                    System.out.println(lane1Horse.getName() + " has won the race!");
+                }
+                else if (raceWonBy(lane2Horse)) {
+                    System.out.println(lane2Horse.getName() + " has won the race!");
+                }
+                else if (raceWonBy(lane3Horse)) {
+                    System.out.println(lane3Horse.getName() + " has won the race!");
+                }
             }
 
             //wait for 100 milliseconds
             try{
                 TimeUnit.MILLISECONDS.sleep(100);
-            } catch(Exception e){
+            } catch (Exception e){
 
             }
         }
@@ -106,6 +115,8 @@ public class Race {
             //so if you double the confidence, the probability that it will fall is *2
             if (Math.random() < (0.1*theHorse.getConfidence()*theHorse.getConfidence())) {
                 theHorse.fall();
+                theHorse.setConfidence(theHorse.getConfidence() - 0.1);
+                // calls the decrement on the current Horse's confidence level
             }
         }
     }
@@ -118,6 +129,7 @@ public class Race {
      */
     private boolean raceWonBy(Horse theHorse) {
         if (theHorse.getDistanceTravelled() == raceLength) {
+             // increment horse confidence if won
             return true;
         } else {
             return false;
@@ -134,13 +146,13 @@ public class Race {
         System.out.println();
 
         printLane(lane1Horse);
-        System.out.println();
+        System.out.println(" " + lane1Horse.getName() + " (Current confidence: " + lane1Horse.getConfidence() + ")");
 
         printLane(lane2Horse);
-        System.out.println();
+        System.out.println(" " + lane2Horse.getName() + " (Current confidence: " + lane2Horse.getConfidence() + ")");
 
         printLane(lane3Horse);
-        System.out.println();
+        System.out.println(" " + lane3Horse.getName() + " (Current confidence: " + lane3Horse.getConfidence() + ")");
 
         multiplePrint('=',raceLength+3); //bottom edge of track
         System.out.println();
@@ -167,7 +179,7 @@ public class Race {
         //if the horse has fallen then print dead
         //else print the horse's symbol
         if(theHorse.hasFallen()) {
-            System.out.print('\u2322');
+            System.out.print('❌');
         } else {
             System.out.print(theHorse.getSymbol());
         }
@@ -176,7 +188,7 @@ public class Race {
         multiplePrint(' ',spacesAfter);
 
         //print the | for the end of the track
-        System.out.print('|');
+        System.out.print("|");
     }
 
 
