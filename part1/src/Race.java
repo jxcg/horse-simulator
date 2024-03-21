@@ -56,6 +56,7 @@ public class Race {
         //declare a local variable to tell us when the race is finished
         boolean finished = false;
 
+
         //reset all the lanes (all horses not fallen and back to 0).
         lane1Horse.goBackToStart();
         lane2Horse.goBackToStart();
@@ -71,18 +72,25 @@ public class Race {
             printRace();
 
             //if any of the three horses has won the race is finished
-            if (raceWonBy(lane1Horse) || raceWonBy(lane2Horse) || raceWonBy(lane3Horse)) {
+
+
+            if (raceWonBy(lane1Horse)) {
+                printRace();
+                System.out.println(lane1Horse.getName() + " has won the race!");
                 finished = true;
-                if (raceWonBy(lane1Horse)) {
-                    System.out.println(lane1Horse.getName() + " has won the race!");
-                }
-                else if (raceWonBy(lane2Horse)) {
-                    System.out.println(lane2Horse.getName() + " has won the race!");
-                }
-                else if (raceWonBy(lane3Horse)) {
-                    System.out.println(lane3Horse.getName() + " has won the race!");
-                }
             }
+            else if (raceWonBy(lane2Horse)) {
+                printRace();
+                System.out.println(lane2Horse.getName() + " has won the race!");
+                finished = true;
+            }
+            else if (raceWonBy(lane3Horse)) {
+                printRace();
+                System.out.println(lane3Horse.getName() + " has won the race!");
+
+                finished = true;
+            }
+
 
             if (lane3Horse.hasFallen() && lane2Horse.hasFallen() && lane1Horse.hasFallen())  {
                 System.out.println("No one finished the race this time :( ");
@@ -134,6 +142,7 @@ public class Race {
      */
     private boolean raceWonBy(Horse theHorse) {
         if (theHorse.getDistanceTravelled() == raceLength) {
+            theHorse.setConfidence(theHorse.getConfidence() + 0.1);
             // increment horse confidence if won
             return true;
         } else {
@@ -145,7 +154,8 @@ public class Race {
      * Print the race on the terminal
      */
     private void printRace() {
-        System.out.print('\u000C');  //clear the terminal window
+        System.out.print("\u000C");  //clear the terminal window
+        clearScreen();
 
         multiplePrint('=',raceLength+3); //top edge of track
         System.out.println();
@@ -209,5 +219,11 @@ public class Race {
             System.out.print(aChar);
             i = i + 1;
         }
+    }
+
+    // Clears the screen properly so it can keep running
+    public static void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 }

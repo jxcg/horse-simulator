@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 /**
  *
  * The Horse class is in charge of instantiating the Horse object,
