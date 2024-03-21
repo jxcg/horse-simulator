@@ -7,8 +7,11 @@ This is a University project as part of coursework for Object Oriented Programmi
 Notable Logs:
 
 **Command Line Project**
-*12/3/2024:* Project Started
-*21/3/2024:* 
 
-- Version 1.1: Added message to denote winning horse.
+*Version 1.1: 21/3/2024*
+- Added message to denote winning horse.
+- Added a Unicode 'Cross' Emoji to denote fallen horse
+- Added Current confidence via .getConfidence() within the current race next to each horse's name
+- Decrement a Horse's current confidence if they fall
+- Increment a Horse's current confidnece if they win
 
