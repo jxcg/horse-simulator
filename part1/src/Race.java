@@ -84,6 +84,11 @@ public class Race {
                 }
             }
 
+            if (lane3Horse.hasFallen() && lane2Horse.hasFallen() && lane1Horse.hasFallen())  {
+                System.out.println("No one finished the race this time :( ");
+                finished = true;
+            }
+
             //wait for 100 milliseconds
             try{
                 TimeUnit.MILLISECONDS.sleep(100);
@@ -129,7 +134,7 @@ public class Race {
      */
     private boolean raceWonBy(Horse theHorse) {
         if (theHorse.getDistanceTravelled() == raceLength) {
-             // increment horse confidence if won
+            // increment horse confidence if won
             return true;
         } else {
             return false;
