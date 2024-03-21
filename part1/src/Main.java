@@ -1,12 +1,16 @@
 class Main {
     public static void main(String[] args) {
         System.out.println("Hello world!");
-        Horse pippi = new Horse('a', "Pippi Longstocking", 0.5);
-        Horse joel = new Horse('b', "Joel Longstocking", 0.7);
-        Horse x = new Horse('c', "Moon", 0.2);
-        Horse newx = new Horse('o', "maam", 1);
-        Race r = new Race(20, pippi, joel, x);
+        Horse zappyHorse = new Horse('♕', "Zappy-Horse", 0.5);
 
+        Horse dataHorse = new Horse('♞', "Data-Horse", 0.7);
+
+        Horse serverHorse = new Horse('♘', "Server-Horse", 0.4);
+
+        Race r = new Race(15);
+        r.addHorse(zappyHorse, 1);
+        r.addHorse(dataHorse, 2);
+        r.addHorse(serverHorse, 3);
 
         r.startRace();
     }

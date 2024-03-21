@@ -20,12 +20,12 @@ public class Race {
      *
      * @param distance the length of the racetrack (in metres/yards...)
      */
-    public Race(int distance, Horse a, Horse b, Horse c) {
+    public Race(int distance) {
         // initialise instance variables
         raceLength = distance;
-        lane1Horse = a;
-        lane2Horse = b;
-        lane3Horse = c;
+        lane1Horse = null;
+        lane2Horse = null;
+        lane3Horse = null;
     }
 
     /**
@@ -73,12 +73,21 @@ public class Race {
             //if any of the three horses has won the race is finished
             if ( raceWonBy(lane1Horse) || raceWonBy(lane2Horse) || raceWonBy(lane3Horse) ) {
                 finished = true;
+                if (raceWonBy(lane1Horse)) {
+                    System.out.println(lane1Horse.getName() + " has won the race!");
+                }
+                else if (raceWonBy(lane2Horse)) {
+                    System.out.println(lane2Horse.getName() + " has won the race!");
+                }
+                else if (raceWonBy(lane3Horse)) {
+                    System.out.println(lane3Horse.getName() + " has won the race!");
+                }
             }
 
             //wait for 100 milliseconds
             try{
                 TimeUnit.MILLISECONDS.sleep(100);
-            } catch(Exception e){
+            } catch (Exception e){
 
             }
         }
@@ -134,13 +143,13 @@ public class Race {
         System.out.println();
 
         printLane(lane1Horse);
-        System.out.println(" " + lane1Horse.getName() + " (Current confidence: " +lane1Horse.getConfidence() + ")");
+        System.out.println(" " + lane1Horse.getName() + " (Current confidence: " + lane1Horse.getConfidence() + ")");
 
         printLane(lane2Horse);
-        System.out.println(" " + lane2Horse.getName());
+        System.out.println(" " + lane2Horse.getName() + " (Current confidence: " + lane2Horse.getConfidence() + ")");
 
         printLane(lane3Horse);
-        System.out.println(" " + lane3Horse.getName());
+        System.out.println(" " + lane3Horse.getName() + " (Current confidence: " + lane3Horse.getConfidence() + ")");
 
         multiplePrint('=',raceLength+3); //bottom edge of track
         System.out.println();
