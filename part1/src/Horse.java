@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 /**
  *
  * The Horse class is in charge of instantiating the Horse object,
@@ -6,7 +8,7 @@
  * plus its confidence rating.
  *
  * Joshua Cameron Ng
- * version 1.0 - 12/03/24
+ * version 1.1 - 22/03/24
  */
 public class Horse {
     // Fields of class

@@ -1,11 +1,18 @@
+/**
+ *
+ * This is the main class
+ *
+ * Joshua Cameron Ng
+ * version 1.1 - 22/03/24
+ */
+
 class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
-        Horse zappyHorse = new Horse('a', "Zappy-Horse", 0.5);
+        Horse zappyHorse = new Horse('a', "Zappy-Horse", 0.46);
 
-        Horse dataHorse = new Horse('a',"Data-Horse", 0.7);
+        Horse dataHorse = new Horse('a',"Data-Horse", 0.5);
 
-        Horse serverHorse = new Horse('a',"Server-Horse", 0.6);
+        Horse serverHorse = new Horse('a',"Server-Horse", 0.5);
         zappyHorse.setSymbol('♕');
         dataHorse.setSymbol('♞');
         serverHorse.setSymbol('♘');
