@@ -1,11 +1,12 @@
 /**
  *
- * This is the main class
+ * This is the main class, serving as the entry point for the application.
+ * This includes multiple Horse objects, alongside their respective lanes,
+ * with names and their confidence rating set.
  *
  * Joshua Cameron Ng
  * version 1.1 - 22/03/24
  */
-
 class Main {
     public static void main(String[] args) {
         Horse zappyHorse = new Horse('a', "Zappy-Horse", 0.46);
