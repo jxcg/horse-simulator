@@ -5,8 +5,8 @@ import java.lang.Math;
  * A three-horse race, each horse running in its own lane
  * for a given distance
  *
- * @author McFarewell
- * @version 1.0
+ * @author McFarewell, Joshua Cameron Ng
+ * @version 1.1
  */
 public class Race {
     private int raceLength;
