@@ -7,7 +7,6 @@
  * Joshua Cameron Ng
  * version 1.1 - 22/03/24
  */
-
 class Main {
     public static void main(String[] args) {
         Horse zappyHorse = new Horse('a', "Zappy-Horse", 0.46);
