@@ -93,24 +93,7 @@ public class Race {
 
 
             if (lane3Horse.hasFallen() && lane2Horse.hasFallen() && lane1Horse.hasFallen())  {
-
-                if (lane1Horse.getDistanceTravelled() > (lane2Horse.getDistanceTravelled())) {
-                    if (lane1Horse.getDistanceTravelled() > (lane3Horse.getDistanceTravelled())) {
-                        System.out.println(lane1Horse.getName() + " has won the race! ");
-                    }
-                    else if (lane3Horse.getDistanceTravelled() > lane1Horse.getDistanceTravelled()) {
-                        System.out.println(lane3Horse.getName() + " has won the race! ");
-                    }
-                }
-
-                if (lane2Horse.getDistanceTravelled() > lane1Horse.getDistanceTravelled()) {
-                    if (lane2Horse.getDistanceTravelled() > lane3Horse.getDistanceTravelled()) {
-                        System.out.println(lane2Horse.getName() + " has won the race! ");
-                    }
-                    else if (lane3Horse.getDistanceTravelled() > lane2Horse.getDistanceTravelled()) {
-                        System.out.println(lane3Horse.getName() + " has won the race!");
-                    }
-                }
+                furthestHorse();
                 finished = true;
             }
 
@@ -242,5 +225,18 @@ public class Race {
     public static void clearScreen() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
+    }
+
+    public void furthestHorse() {
+        int furthestHorse = Math.max(lane3Horse.getDistanceTravelled(),(Math.max(lane1Horse.getDistanceTravelled(), lane2Horse.getDistanceTravelled())));
+        if (furthestHorse == lane1Horse.getDistanceTravelled()) {
+            System.out.println(lane1Horse.getName() + " has won the race!");
+        }
+        else if (furthestHorse == lane2Horse.getDistanceTravelled()) {
+            System.out.println(lane2Horse.getName() + " has won the race!");
+        }
+        else {
+            System.out.println(lane3Horse.getName() + " has won the race!");
+        }
     }
 }
