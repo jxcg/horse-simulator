@@ -93,7 +93,24 @@ public class Race {
 
 
             if (lane3Horse.hasFallen() && lane2Horse.hasFallen() && lane1Horse.hasFallen())  {
-                System.out.println("No one finished the race this time :( ");
+
+                if (lane1Horse.getDistanceTravelled() > (lane2Horse.getDistanceTravelled())) {
+                    if (lane1Horse.getDistanceTravelled() > (lane3Horse.getDistanceTravelled())) {
+                        System.out.println(lane1Horse.getName() + " has won the race! ");
+                    }
+                    else if (lane3Horse.getDistanceTravelled() > lane1Horse.getDistanceTravelled()) {
+                        System.out.println(lane3Horse.getName() + " has won the race! ");
+                    }
+                }
+
+                if (lane2Horse.getDistanceTravelled() > lane1Horse.getDistanceTravelled()) {
+                    if (lane2Horse.getDistanceTravelled() > lane3Horse.getDistanceTravelled()) {
+                        System.out.println(lane2Horse.getName() + " has won the race! ");
+                    }
+                    else if (lane3Horse.getDistanceTravelled() > lane2Horse.getDistanceTravelled()) {
+                        System.out.println(lane3Horse.getName() + " has won the race!");
+                    }
+                }
                 finished = true;
             }
 
