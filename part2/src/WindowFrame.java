@@ -99,6 +99,9 @@ public class WindowFrame extends JFrame implements ActionListener {
         }
         if (e.getSource() == startButton) {
             startButton.setForeground(Color.GREEN);
+            Point frameLocation = this.getLocation();
+            PlayWindow playInstance = new PlayWindow(frameLocation);
+            this.dispose();
 
 
         }
