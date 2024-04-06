@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Objects;
 
 public class WindowFrame extends JFrame implements ActionListener {
 
@@ -43,9 +44,11 @@ public class WindowFrame extends JFrame implements ActionListener {
         // textPanel.setBackground(Color.GREEN);
 
 
-        JLabel title = new JLabel("Welcome to " + programTitle);
-        title.setFont(new Font("Helvetica", Font.BOLD, 28));
+        JLabel title = new JLabel(programTitle);
+        title.setFont(new Font("Helvetica", Font.BOLD, 48));
+        title.setForeground(Color.WHITE);
         JLabel author = new JLabel("Author: Joshua Cameron Ng - SID: 230309485 ");
+        author.setForeground(Color.LIGHT_GRAY);
         textPanel.add(title);
         authorPanel.add(author);
         JPanel buttonPanel = new JPanel();
@@ -69,9 +72,10 @@ public class WindowFrame extends JFrame implements ActionListener {
 
 
         try {
-            backgroundImage = ImageIO.read(getClass().getResource("/resources/background.jpeg"));
-        } catch (IOException e) {
+            backgroundImage = ImageIO.read(Objects.requireNonNull(getClass().getResource("resources/background.jpeg")));
+        } catch (NullPointerException | IOException e) {
             e.printStackTrace();
+            System.out.println("Unable to load background image from source :( ");
         }
 
 
