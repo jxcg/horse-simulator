@@ -1,35 +1,102 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public class WindowFrame extends JFrame implements ActionListener {
 
-    WindowFrame(String programTitle) {
+    public JButton startButton = new JButton("Play");
+    public JButton customiseButton = new JButton("Customise");
+    public JButton historyButton = new JButton("History");
+    public JButton exitButton = new JButton("Exit");
+    public BufferedImage backgroundImage;
+
+
+    public WindowFrame(String programTitle)  {
         // sets program to be visible, 1280x720, halts on close
         this.setVisible(true);
+        this.setLayout(null);
         this.setSize(1280,720);
+        this.setResizable(false);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setTitle(programTitle);
 
-        FlowLayout flowLayout = new FlowLayout(FlowLayout.TRAILING);
-        this.setLayout(flowLayout);
-        JButton startButton = new JButton("Start"); this.add(startButton);
-        startButton.setPreferredSize(new Dimension(65,35));
-        JButton optionsButton = new JButton("Options"); this.add(optionsButton);
-        optionsButton.setPreferredSize(new Dimension(65,35));
-        JButton exitButton = new JButton("Exit"); this.add(exitButton);
-        exitButton.setPreferredSize(new Dimension(65,35));
+
+        JPanel textPanel = new JPanel();
+
+        JPanel authorPanel = new JPanel();
+
+        this.add(textPanel);
+        textPanel.setOpaque(false);
+        this.add(authorPanel);
+        authorPanel.setOpaque(false);
+
+        authorPanel.setBounds(0,300,this.getWidth(), 25);
+
+        // authorPanel.setBackground(Color.CYAN);
+
+        textPanel.setBounds(0,250,this.getWidth(),50);
+
+        // textPanel.setBackground(Color.GREEN);
+
+
+        JLabel title = new JLabel("Welcome to " + programTitle);
+        title.setFont(new Font("Helvetica", Font.BOLD, 28));
+        JLabel author = new JLabel("Author: Joshua Cameron Ng - SID: 230309485 ");
+        textPanel.add(title);
+        authorPanel.add(author);
+        JPanel buttonPanel = new JPanel();
+        this.add(buttonPanel);
+        buttonPanel.setOpaque(false);
+
+        buttonPanel.setBounds(0,350,this.getWidth(),150);
+
+        //buttonPanel.setBackground(Color.RED);
+        buttonPanel.add(startButton);
+        buttonPanel.add(customiseButton);
+        buttonPanel.add(historyButton);
+        buttonPanel.add(exitButton);
+
+        startButton.setFocusable(false);
+        customiseButton.setFocusable(false);
+        historyButton.setFocusable(false);
+        exitButton.setFocusable(false);
+        exitButton.addActionListener(this);
+        startButton.addActionListener(this);
+
+
+        try {
+            backgroundImage = ImageIO.read(getClass().getResource("/resources/background.jpeg"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
 
+        JPanel backgroundPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(backgroundImage, 0,0, getWidth(), getHeight(), null);
+            }
+        };
+        backgroundPanel.setBounds(0,0,this.getWidth(),this.getHeight());
+        this.add(backgroundPanel);
 
-
-
-        this.setVisible(true);
     }
     @Override
     public void actionPerformed(ActionEvent e) {
+        // exit button closes
+        if (e.getSource() == exitButton) {
+            System.exit(0);
+        }
+        if (e.getSource() == startButton) {
+            startButton.setForeground(Color.GREEN);
 
+
+        }
     }
 }
