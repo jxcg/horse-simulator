@@ -3,5 +3,6 @@ public class Main {
         final String programTitle = "Horse Simulator";
         WindowFrame wf = new WindowFrame(programTitle);
         wf.setVisible(true);
+
     }
 }

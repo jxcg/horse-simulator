@@ -13,6 +13,7 @@ public class PlayWindow extends JFrame implements ActionListener {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setTitle(("Horse Simulator"));
         this.setLocation(frameLocation);
+
     }
 
 

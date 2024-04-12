@@ -14,6 +14,14 @@ public class WindowFrame extends JFrame implements ActionListener {
     public JButton historyButton = new JButton("History");
     public JButton exitButton = new JButton("Exit");
     public BufferedImage backgroundImage;
+    public Horse horse1;
+    public Horse horse2;
+    public Horse horse3;
+    char codePointChar;
+    String symbol;
+    String horseName;
+    double confidenceRating;
+    private Horse[] customHorses;
 
 
     public WindowFrame(String programTitle)  {
@@ -34,6 +42,7 @@ public class WindowFrame extends JFrame implements ActionListener {
         textPanel.setOpaque(false);
         this.add(authorPanel);
         authorPanel.setOpaque(false);
+
 
         authorPanel.setBounds(0,300,this.getWidth(), 25);
 
@@ -67,8 +76,11 @@ public class WindowFrame extends JFrame implements ActionListener {
         customiseButton.setFocusable(false);
         historyButton.setFocusable(false);
         exitButton.setFocusable(false);
-        exitButton.addActionListener(this);
+        // action listener
         startButton.addActionListener(this);
+        customiseButton.addActionListener(this);
+        historyButton.addActionListener(this);
+        exitButton.addActionListener(this);
 
 
         try {
@@ -98,12 +110,43 @@ public class WindowFrame extends JFrame implements ActionListener {
             System.exit(0);
         }
         if (e.getSource() == startButton) {
-            startButton.setForeground(Color.GREEN);
-            Point frameLocation = this.getLocation();
-            PlayWindow playInstance = new PlayWindow(frameLocation);
             this.dispose();
+            if (customHorses != null) {
+                Race r = new Race(15, customHorses.length);
+                for (int i = 0; i<customHorses.length; i++) {
+                    r.addHorse(customHorses[i], (i+1));
+                }
+                r.startRace();
+            }
+            else {
+                horse1 = new Horse(codePointChar, "Zappy-Horse", 0.46);
+                horse2 = new Horse(codePointChar,"Data-Horse", 0.5);
+                horse3 = new Horse(codePointChar,"Server-Horse", 0.5);
 
+                horse1.setSymbol('♕');
+                horse2.setSymbol('♞');
+                horse3.setSymbol('♘');
 
+                Race r = new Race(15, 3);
+                r.addHorse(horse1, 1);
+                r.addHorse(horse2, 2);
+                r.addHorse(horse3, 3);
+                r.startRace();
+            }
+        }
+        else if (e.getSource() == customiseButton) {
+            System.out.println("clicked");
+
+            int tracks = Integer.parseInt(JOptionPane.showInputDialog("Enter how many tracks you want: "));
+            customHorses = new Horse[tracks];
+            for (int i = 0; i<customHorses.length; i++) {
+                horseName = JOptionPane.showInputDialog("Enter name of horse");
+                confidenceRating = Double.parseDouble(JOptionPane.showInputDialog("Enter " + horseName + "'s confidence rating"));
+                symbol = JOptionPane.showInputDialog("What should " + horseName + " be represented by?");
+                codePointChar = symbol.charAt(0);
+                customHorses[i] = new Horse(codePointChar, horseName, confidenceRating);
+
+            }
         }
     }
 }
