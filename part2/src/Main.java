@@ -1,5 +1,9 @@
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        final String programTitle = "Horse Simulator";
+        WindowFrame wf = new WindowFrame(programTitle);
+        wf.setVisible(true);
+
     }
 }
+

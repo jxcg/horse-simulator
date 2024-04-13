@@ -1,0 +1,2 @@
+Horse name: horseA, Distance travelled: 28 units, Symbol: t
+WINNER HORSE: horseA
