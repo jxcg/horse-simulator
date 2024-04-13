@@ -17,19 +17,33 @@ public class Horse {
     private int horseTravelled; /* whole number */
     private boolean horseFell;
     private double horseConfidence; /* 0-1 */
+    private String horseCoat;
 
     // Constructor of class Horse
 
-    public Horse(char horseSymbol, String horseName, double horseConfidence) {
+    public Horse(char horseSymbol, String horseName, double horseConfidence, String horseCoat) {
         this.horseSymbol = horseSymbol;
         this.horseName = horseName;
         this.horseConfidence = horseConfidence;
+        this.horseCoat = horseCoat;
+    }
+
+    public Horse() {
+
     }
     // Other methods of class Horse
 
     // Accessor Methods
     public double getConfidence() {
         return this.horseConfidence;
+    }
+
+    public String getHorseCoat() {
+        return this.horseCoat;
+    }
+
+    public void setHorseCoat(String horseCoat) {
+        this.horseCoat = horseCoat;
     }
 
     public int getDistanceTravelled() {
@@ -43,6 +57,15 @@ public class Horse {
     public char getSymbol() {
         return this.horseSymbol;
     }
+
+    public void setHorseStringSymbol(String horseSymbol) {
+        this.horseSymbol = horseSymbol.charAt(0);
+    }
+
+    public void setHorseName(String horseName) {
+        this.horseName = horseName;
+    }
+
     public boolean hasFallen() {
         return this.horseFell;
     }
