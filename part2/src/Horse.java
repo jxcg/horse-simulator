@@ -29,7 +29,7 @@ public class Horse {
     }
 
     public Horse() {
-
+        // black constructor
     }
     // Other methods of class Horse
 

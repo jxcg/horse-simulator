@@ -189,6 +189,8 @@ public class WindowFrame extends JFrame implements ActionListener {
                     r.addHorse(customHorses[i], (i+1));
                 }
                 r.startRace();
+                System.out.println("race ended.. writing to file!");
+
             }
             else {
                 int dialogResult = JOptionPane.showConfirmDialog(this, "You didn't make any horses! Can I start the game with preset one?");
@@ -208,7 +210,7 @@ public class WindowFrame extends JFrame implements ActionListener {
                     r.addHorse(horse2, 2);
                     r.addHorse(horse3, 3);
                     r.startRace();
-                    System.out.println("race ended.. writing to file!");
+                    System.out.println("Race ended... writing to file!");
                 }
                 else {
                     JOptionPane.showMessageDialog(this, "Click on Customise to create some!");
@@ -225,6 +227,7 @@ public class WindowFrame extends JFrame implements ActionListener {
                     customHorses = new Horse[tracks];
                     //System.out.println(raceLengthDistance);
                     for (int i = 0; i<customHorses.length; i++) {
+
                         horseName = JOptionPane.showInputDialog("Enter the name of your horse " + "(" + (i+1) +")");
                         if (horseName == null || horseName.isEmpty()) {
                             // user cancelled operation
@@ -256,6 +259,7 @@ public class WindowFrame extends JFrame implements ActionListener {
                         catch (NumberFormatException error) {
                             JOptionPane.showMessageDialog(this, confidenceRatingInput + " is not a valid number");
                         }
+
                     }
                 }
 

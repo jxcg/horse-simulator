@@ -1,2 +1,4 @@
-Horse name: horseA, Distance travelled: 28 units, Symbol: t
-WINNER HORSE: horseA
+Horse name: Zappy-Horse, Distance travelled: 1 units, Symbol: ♕, Coat: Palomino
+Horse name: Data-Horse, Distance travelled: 1 units, Symbol: ♞, Coat: Bay
+Horse name: Server-Horse, Distance travelled: 1 units, Symbol: ♘, Coat: Chestnut
+WINNER HORSE: Zappy-Horse

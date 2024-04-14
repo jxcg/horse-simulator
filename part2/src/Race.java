@@ -76,12 +76,7 @@ public class Race {
                 System.out.println(Objects.requireNonNull(getWinningHorse()).getName() + " has won the race!");
                 finished = true;
                 try {
-                    BufferedWriter resultsWriter = new BufferedWriter(new FileWriter("results.txt"));
-                    for (Horse horse : horses) {
-                        resultsWriter.write("Horse name: " + horse.getName() + ", Distance travelled: " + horse.getDistanceTravelled() + " units, " + "Symbol: " + horse.getSymbol());
-                        resultsWriter.newLine();
-                    }
-                    resultsWriter.write("WINNER HORSE: " + Objects.requireNonNull(getWinningHorse()).getName());
+                    BufferedWriter resultsWriter = getBufferedWriter(allHorsesFallen());
                     resultsWriter.close();
                 }
                 catch (IOException e) {
@@ -95,13 +90,7 @@ public class Race {
                 furthestHorse();
                 finished = true;
                 try {
-                    BufferedWriter resultsWriter = new BufferedWriter(new FileWriter("results.txt"));
-                    for (Horse horse : horses) {
-                        System.out.println(horse.getDistanceTravelled());
-                        resultsWriter.write("Horse name: " + horse.getName() + ", Distance travelled: " + horse.getDistanceTravelled() + " units, " + "Symbol: " + horse.getSymbol());
-                        resultsWriter.newLine();
-                    }
-                    resultsWriter.write("WINNER HORSE: " + getFurthestHorse().getName());
+                    BufferedWriter resultsWriter = getBufferedWriter(allHorsesFallen());
                     resultsWriter.close();
                 } catch (IOException e) {
                     System.err.println("Error writing to results file. See error logs for more" );
@@ -134,6 +123,24 @@ public class Race {
             System.err.println("Error writing to state file.");
             System.out.println("Unable to write to file!");
         }
+    }
+
+    private BufferedWriter getBufferedWriter(boolean allHorseFallen) throws IOException {
+        BufferedWriter resultsWriter = new BufferedWriter(new FileWriter("results.txt"));
+        if (allHorseFallen) {
+            for (Horse horse : horses) {
+                resultsWriter.write("Horse name: " + horse.getName() + ", Distance travelled: " + horse.getDistanceTravelled() + " units, " + "Symbol: " + horse.getSymbol() + ", Coat: " + horse.getHorseCoat());
+                resultsWriter.newLine();
+            }
+            resultsWriter.write("WINNER HORSE: " + Objects.requireNonNull(getFurthestHorse()).getName());
+            return resultsWriter;
+        }
+        for (Horse horse : horses) {
+            resultsWriter.write("Horse name: " + horse.getName() + ", Distance travelled: " + horse.getDistanceTravelled() + " units, " + "Symbol: " + horse.getSymbol() + ", Coat " + horse.getHorseCoat());
+            resultsWriter.newLine();
+        }
+        resultsWriter.write("WINNER HORSE: " + Objects.requireNonNull(getWinningHorse()).getName());
+        return resultsWriter;
     }
 
 
