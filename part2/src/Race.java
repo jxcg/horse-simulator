@@ -16,6 +16,9 @@ import java.lang.Math;
 public class Race {
     private int raceLength;
     private Horse[] horses;
+    long startTime;
+    long endTime;
+    long finishingTime;
 
     /**
      * Constructor for objects of class Race
@@ -43,6 +46,10 @@ public class Race {
         }
     }
 
+    public long getCurrentTime() {
+        return System.currentTimeMillis();
+    }
+
     /**
      * Start the race
      * The horse are brought to the start and
@@ -50,6 +57,7 @@ public class Race {
      * race is finished
      */
     public void startRace() {
+        startTime = getCurrentTime();
         //declare a local variable to tell us when the race is finished
         boolean finished = false;
         //reset all the lanes (all horses not fallen and back to 0).
@@ -72,12 +80,17 @@ public class Race {
 
             //if any of the three horses has won the race is finished
             if (raceWonBy()) {
+                endTime = getCurrentTime();
+                finishingTime = endTime-startTime;
+
                 printRace();
                 System.out.println(Objects.requireNonNull(getWinningHorse()).getName() + " has won the race!");
                 finished = true;
                 try {
                     BufferedWriter resultsWriter = getBufferedWriter(allHorsesFallen());
                     resultsWriter.close();
+                    System.out.println("The race ended in " + finishingTime + " milliseconds");
+
                 }
                 catch (IOException e) {
                     System.err.println("Error writing to results file. See error logs for more" );
@@ -87,11 +100,14 @@ public class Race {
             }
 
             if (allHorsesFallen()) {
+                endTime = getCurrentTime();
+                finishingTime = endTime-startTime;
                 furthestHorse();
                 finished = true;
                 try {
                     BufferedWriter resultsWriter = getBufferedWriter(allHorsesFallen());
                     resultsWriter.close();
+                    System.out.println("The race ended in " + finishingTime + " milliseconds");
                 } catch (IOException e) {
                     System.err.println("Error writing to results file. See error logs for more" );
                     System.out.println();
@@ -111,7 +127,7 @@ public class Race {
             BufferedWriter horseData = new BufferedWriter(new FileWriter("horseData.txt"));
             int currentLine = 0;
             for (Horse individualHorse : horses) {
-                horseData.write(individualHorse.getSymbol() + "," + individualHorse.getName() + "," + individualHorse.getConfidence() +"," + individualHorse.getHorseCoat());
+                horseData.write(individualHorse.getSymbol() + "," + individualHorse.getName() + "," + individualHorse.getConfidence() +"," + individualHorse.getHorseCoat() + "," + individualHorse.getHorseBoots());
                 currentLine++;
                 if (currentLine < horses.length) {
                     horseData.newLine();
@@ -129,17 +145,17 @@ public class Race {
         BufferedWriter resultsWriter = new BufferedWriter(new FileWriter("results.txt"));
         if (allHorseFallen) {
             for (Horse horse : horses) {
-                resultsWriter.write("Horse name: " + horse.getName() + ", Distance travelled: " + horse.getDistanceTravelled() + " units, " + "Symbol: " + horse.getSymbol() + ", Coat: " + horse.getHorseCoat());
+                resultsWriter.write(horse.getName() + "," + horse.getDistanceTravelled() + "," + horse.getSymbol() + "," + horse.getHorseCoat() + "," + horse.getHorseBoots());
                 resultsWriter.newLine();
             }
-            resultsWriter.write("WINNER HORSE: " + Objects.requireNonNull(getFurthestHorse()).getName());
+            resultsWriter.write("WINNER HORSE: " + Objects.requireNonNull(getFurthestHorse()).getName() + "," + finishingTime);
             return resultsWriter;
         }
         for (Horse horse : horses) {
-            resultsWriter.write("Horse name: " + horse.getName() + ", Distance travelled: " + horse.getDistanceTravelled() + " units, " + "Symbol: " + horse.getSymbol() + ", Coat " + horse.getHorseCoat());
+            resultsWriter.write(horse.getName() + "," + horse.getDistanceTravelled() + "," + horse.getSymbol() + "," + horse.getHorseCoat() + "," + horse.getHorseBoots());
             resultsWriter.newLine();
         }
-        resultsWriter.write("WINNER HORSE: " + Objects.requireNonNull(getWinningHorse()).getName());
+        resultsWriter.write("WINNER HORSE: " + Objects.requireNonNull(getWinningHorse()).getName() + "," + finishingTime);
         return resultsWriter;
     }
 
@@ -221,7 +237,7 @@ public class Race {
         for (Horse horse : horses) {
             if (horse != null) {
                 printLane(horse);
-                System.out.println(" " + horse.getName() + " (Current confidence: " + horse.getConfidence() + ")" + " Coat: " + horse.getHorseCoat());
+                System.out.println(" " + horse.getName() + " (Current confidence: " + horse.getConfidence() + ")" + " Coat: " + horse.getHorseCoat() + " | [BOOTS] " + horse.getHorseBoots());
             }
         }
 
@@ -293,7 +309,7 @@ public class Race {
         }
 
         if (furthestHorse != null) {
-            System.out.println(furthestHorse.getName() + " has won the race as it has travelled the furthest (" +  furthestHorse.getDistanceTravelled() + ")");
+            System.out.println(furthestHorse.getName() + " has won the race as it has travelled the furthest (" +  furthestHorse.getDistanceTravelled() + " blocks)");
         }
     }
 

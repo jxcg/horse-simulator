@@ -1,4 +1,4 @@
-Horse name: Zappy-Horse, Distance travelled: 1 units, Symbol: ♕, Coat: Palomino
-Horse name: Data-Horse, Distance travelled: 1 units, Symbol: ♞, Coat: Bay
-Horse name: Server-Horse, Distance travelled: 1 units, Symbol: ♘, Coat: Chestnut
-WINNER HORSE: Zappy-Horse
+Zappy-Horse,7,♕,Palomino,Greygreen
+Data-Horse,15,♞,Bay,Black
+Server-Horse,13,♘,Chestnut,White
+WINNER HORSE: Data-Horse,3557

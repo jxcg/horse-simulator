@@ -14,22 +14,21 @@ public class WindowFrame extends JFrame implements ActionListener {
     public JButton startButton = new JButton("Play");
     public JButton customiseButton = new JButton("Customise");
     public JButton historyButton = new JButton("History");
-    public JButton loadButton = new JButton("Load from Save");
+    public JButton loadButton = new JButton("Load Save");
     public JButton betButton = new JButton("Bet");
     public JButton customiseTrackLengthButton = new JButton("Track Length");
     public JButton exitButton = new JButton("Exit");
     public BufferedImage backgroundImage;
-    public Horse horse1;
-    public Horse horse2;
-    public Horse horse3;
     char codePointChar;
     String symbol;
     String horseName;
-    double confidenceRating;
+    String horseBoots;
     String horseCoat;
     private Horse[] customHorses;
-    int raceLengthDistance = 15;
+    int raceLengthDistance = 15; // Default race length distance
     int linesLength = 0;
+    double confidenceRating;
+    int loadCounter = 0;
 
     public WindowFrame(String programTitle)  {
         // sets program to be visible, 1280x720, halts on close
@@ -72,8 +71,9 @@ public class WindowFrame extends JFrame implements ActionListener {
 
         buttonPanel.setBounds(0,350,this.getWidth(),150);
 
-        //buttonPanel.setBackground(Color.RED);
+
         buttonPanel.add(startButton);
+        //buttonPanel.setBackground(Color.RED);
         buttonPanel.add(customiseButton);
         buttonPanel.add(historyButton);
         buttonPanel.add(loadButton);
@@ -101,8 +101,8 @@ public class WindowFrame extends JFrame implements ActionListener {
 
         try {
             backgroundImage = ImageIO.read(Objects.requireNonNull(getClass().getResource("resources/background.jpeg")));
-        } catch (NullPointerException | IOException e) {
-            e.printStackTrace();
+        } catch (NullPointerException | IOException error) {
+            error.printStackTrace();
             System.out.println("Unable to load background image from source :( ");
         }
 
@@ -119,6 +119,7 @@ public class WindowFrame extends JFrame implements ActionListener {
     }
     @Override
     public void actionPerformed(ActionEvent e) {
+
         // exit button closes
         if (e.getSource() == exitButton) {
             System.exit(0);
@@ -142,29 +143,35 @@ public class WindowFrame extends JFrame implements ActionListener {
         }
 
         if (e.getSource() == loadButton) {
-            try {
-                BufferedReader lengthCounter = new BufferedReader(new FileReader("horseData.txt"));
-                while ((lengthCounter.readLine()) != null) {
-                    linesLength++;
-                    System.out.println(linesLength + " entries");
-                }
+            loadCounter++;
+            if (loadCounter > 1) {
+                System.out.println("Last session loaded already");
+            }
+            else {
+                try {
+                    BufferedReader lengthCounter = new BufferedReader(new FileReader("horseData.txt"));
+                    while ((lengthCounter.readLine()) != null) {
+                        linesLength++;
+                        System.out.println(linesLength + " entries");
+                    }
+                    JOptionPane.showMessageDialog(this,"Last session loaded successfully");
 
-            } catch (IOException lackOfFileToReadFrom) {
-                System.out.println("There's no file to read from! Running from default settings.");
+
+                } catch (IOException lackOfFileToReadFrom) {
+                    System.out.println("There's no file to read from! Running from default settings.");
+                }
+                // amount of lines in file is the size of the array
+                customHorses = new Horse[linesLength];
+                for (int i = 0; i < customHorses.length; i++) {
+                    customHorses[i] = new Horse();
+                }
             }
-            // amount of lines in file is the size of the array
-            customHorses = new Horse[linesLength];
-            for (int i = 0; i<customHorses.length; i++) {
-                customHorses[i] = new Horse();
-            }
-            System.out.println(linesLength);
 
             try {
                 BufferedReader horseStateReader = new BufferedReader(new FileReader("horseData.txt"));
                 String currLine;
                 int currentIndex = 0;
                 while ((currLine = horseStateReader.readLine()) != null) {
-                    System.out.println(currLine);
                     String[] currentLineComponents = currLine.split(",");
                     for (int i = 0; i<currentLineComponents.length; i++) {
                         System.out.println(currentLineComponents[i]);
@@ -174,6 +181,7 @@ public class WindowFrame extends JFrame implements ActionListener {
                     customHorses[currentIndex].setHorseName(currentLineComponents[1]);
                     customHorses[currentIndex].setConfidence(Double.parseDouble(currentLineComponents[2]));
                     customHorses[currentIndex].setHorseCoat(currentLineComponents[3]);
+                    customHorses[currentIndex].setHorseBoots(currentLineComponents[4]);
                     currentIndex++;
                 }
             } catch (IOException lackOfFileToReadFrom) {
@@ -197,9 +205,9 @@ public class WindowFrame extends JFrame implements ActionListener {
                 if (dialogResult == JOptionPane.YES_OPTION) {
                     this.dispose();
                     // Default Case is 3 horses and 3 tracks
-                    horse1 = new Horse(codePointChar, "Zappy-Horse", 0.46, "Palomino");
-                    horse2 = new Horse(codePointChar,"Data-Horse", 0.5, "Bay");
-                    horse3 = new Horse(codePointChar,"Server-Horse", 0.5, "Chestnut");
+                    Horse horse1 = new Horse(codePointChar, "Zappy-Horse", 0.46, "Palomino", "Greygreen");
+                    Horse horse2 = new Horse(codePointChar,"Data-Horse", 0.5, "Bay", "Black");
+                    Horse horse3 = new Horse(codePointChar,"Server-Horse", 0.5, "Chestnut", "White");
 
                     horse1.setSymbol('♕');
                     horse2.setSymbol('♞');
@@ -211,6 +219,7 @@ public class WindowFrame extends JFrame implements ActionListener {
                     r.addHorse(horse3, 3);
                     r.startRace();
                     System.out.println("Race ended... writing to file!");
+
                 }
                 else {
                     JOptionPane.showMessageDialog(this, "Click on Customise to create some!");
@@ -253,8 +262,14 @@ public class WindowFrame extends JFrame implements ActionListener {
                                 break;
                             }
 
+                            horseBoots = JOptionPane.showInputDialog("Enter horse boots for horse: " + customHorses[i]);
+                            if (horseBoots == null || horseBoots.isEmpty()) {
+                                JOptionPane.showMessageDialog(this, "Aborting Customisation");
+                                break;
+                            }
 
-                            customHorses[i] = new Horse(codePointChar, horseName, confidenceRating, horseCoat);
+
+                            customHorses[i] = new Horse(codePointChar, horseName, confidenceRating, horseCoat, horseBoots);
                         }
                         catch (NumberFormatException error) {
                             JOptionPane.showMessageDialog(this, confidenceRatingInput + " is not a valid number");
