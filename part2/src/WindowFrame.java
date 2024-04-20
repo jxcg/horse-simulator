@@ -136,9 +136,6 @@ public class WindowFrame extends JFrame implements ActionListener {
             textPanel.setVisible(false);
             authorPanel.setVisible(false);
             buttonPanel.setVisible(false);
-
-
-
             historyPanel = new JPanel();
             backgroundPanel.setLayout(new GridBagLayout());
 
@@ -268,7 +265,7 @@ public class WindowFrame extends JFrame implements ActionListener {
                     textArea.append("\n");
                 }
                 JScrollPane scrollPane = new JScrollPane(textArea);
-                scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS); // Optional: Show vertical scrollbar always
+                scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
                 JOptionPane.showMessageDialog(this, scrollPane, "Entries Loaded", JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException lackOfFileToReadFrom) {
@@ -283,14 +280,17 @@ public class WindowFrame extends JFrame implements ActionListener {
                     textArea.append("Name: " + customHorses[i].getName() + " - Rating: " + customHorses[i].getConfidence() + " - Boots: " + customHorses[i].getHorseBoots() + " - Coat: " + customHorses[i].getHorseCoat());
                     textArea.append("\n");
                 }
+                JScrollPane scrollPane = new JScrollPane(textArea);
+                scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+                JOptionPane.showMessageDialog(this, scrollPane, "Current Horses Loaded", JOptionPane.INFORMATION_MESSAGE);
 
-                this.dispose();
                 Race r = new Race(raceLengthDistance, customHorses.length);
                 for (int i = 0; i<customHorses.length; i++) {
                     r.addHorse(customHorses[i], (i+1));
                 }
-                r.startRaceGUI();
-                System.out.println("race ended.. writing to file!");
+                this.dispose();
+                r.startRaceGUI(this.getLocation());
+                System.out.println("Race ended... writing to file!");
 
             }
             else {
@@ -310,7 +310,8 @@ public class WindowFrame extends JFrame implements ActionListener {
                     r.addHorse(horse1, 1);
                     r.addHorse(horse2, 2);
                     r.addHorse(horse3, 3);
-                    r.startRaceGUI();
+
+                    r.startRaceGUI(this.getLocation());
                     System.out.println("Race ended... writing to file!");
 
                 }
@@ -380,7 +381,7 @@ public class WindowFrame extends JFrame implements ActionListener {
 
     public static boolean isValidNumber(String input) {
         try {
-            double val = Double.parseDouble(input);
+            Double.parseDouble(input);
         } catch (NumberFormatException e) {
             return false;
         }
