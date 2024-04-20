@@ -1,4 +1,3 @@
-Zappy-Horse,7,♕,Palomino,Greygreen
+Zappy-Horse,6,♕,Palomino,Greygreen
 Data-Horse,15,♞,Bay,Black
-Server-Horse,13,♘,Chestnut,White
-WINNER HORSE: Data-Horse,3557
+Server-Horse,12,♘,Chestnut,White

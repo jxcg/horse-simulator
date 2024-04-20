@@ -1,10 +1,12 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Objects;
@@ -29,6 +31,12 @@ public class WindowFrame extends JFrame implements ActionListener {
     int linesLength = 0;
     double confidenceRating;
     int loadCounter = 0;
+    JPanel authorPanel;
+    JPanel textPanel;
+    JPanel historyPanel;
+    JPanel buttonPanel;
+    JButton historyBackButton;
+    JPanel backgroundPanel;
 
     public WindowFrame(String programTitle)  {
         // sets program to be visible, 1280x720, halts on close
@@ -39,9 +47,8 @@ public class WindowFrame extends JFrame implements ActionListener {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setTitle(programTitle);
 
-
-        JPanel textPanel = new JPanel();
-        JPanel authorPanel = new JPanel();
+        textPanel = new JPanel();
+        authorPanel = new JPanel();
 
         this.add(textPanel);
         textPanel.setOpaque(false);
@@ -65,7 +72,7 @@ public class WindowFrame extends JFrame implements ActionListener {
         author.setForeground(Color.LIGHT_GRAY);
         textPanel.add(title);
         authorPanel.add(author);
-        JPanel buttonPanel = new JPanel();
+        buttonPanel = new JPanel();
         this.add(buttonPanel);
         buttonPanel.setOpaque(false);
 
@@ -106,7 +113,7 @@ public class WindowFrame extends JFrame implements ActionListener {
             System.out.println("Unable to load background image from source :( ");
         }
 
-        JPanel backgroundPanel = new JPanel() {
+        backgroundPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -123,6 +130,74 @@ public class WindowFrame extends JFrame implements ActionListener {
         // exit button closes
         if (e.getSource() == exitButton) {
             System.exit(0);
+        }
+
+        if (e.getSource() == historyButton) {
+            textPanel.setVisible(false);
+            authorPanel.setVisible(false);
+            buttonPanel.setVisible(false);
+
+
+
+            historyPanel = new JPanel();
+            backgroundPanel.setLayout(new GridBagLayout());
+
+            GridBagConstraints constraints = new GridBagConstraints();
+            constraints.gridx = 0;
+            constraints.gridy = 1;
+            constraints.weightx = 1.0;
+            constraints.weighty = 1.0;
+            constraints.fill = GridBagConstraints.BOTH;
+
+            backgroundPanel.add(historyPanel, constraints);
+            historyBackButton = new JButton("Back");
+            historyBackButton.setContentAreaFilled(false);
+            historyBackButton.setFocusable(false);
+            historyPanel.add(historyBackButton);
+            historyPanel.setVisible(true);
+            historyPanel.setOpaque(false); // Make background transparent 9FALSE
+
+
+            historyBackButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    textPanel.setVisible(true);
+                    authorPanel.setVisible(true);
+                    buttonPanel.setVisible(true);
+                    historyPanel.setVisible(false);
+                    historyBackButton.setVisible(false);
+                }
+            });
+
+            try (BufferedReader reader = new BufferedReader(new FileReader("results.txt"))) {
+                String line;
+                JLabel lastGame = new JLabel("Results of Last Game:      ");
+                lastGame.setForeground(Color.white);
+                Font results = new Font("Helvetica", Font.BOLD, 24);  // make a new font object
+
+                lastGame.setFont(results);
+                historyPanel.add(lastGame);
+                while ((line = reader.readLine()) != null) {
+                    String[] parts = line.split(",");
+                    JLabel horseLabel = new JLabel("<html><b>Name:</b> " + parts[0] + "<br><b>Distance Travelled:</b> " + parts[1] + "<br><b>Symbol:</b> " + parts[2] + "<br><b>Horse Coat:</b> " + parts[3] + "<br><b>Boots:</b> " + parts[4] + "<br><br></html>");
+                    JLabel breaks = new JLabel("<html><br><br></html>");
+
+                    horseLabel.setForeground(Color.white);
+                    historyPanel.add(breaks);
+                    historyPanel.add(horseLabel);
+                    historyPanel.setBackground(Color.BLACK);
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            getContentPane().add(historyPanel);
+            backgroundPanel.add(historyPanel);
+            historyPanel.setOpaque(false);
+
+            textPanel.setVisible(false);
+            authorPanel.setVisible(false);
+            buttonPanel.setVisible(false);
+            historyPanel.setVisible(true);
         }
 
         if (e.getSource() == customiseTrackLengthButton) {
@@ -146,6 +221,7 @@ public class WindowFrame extends JFrame implements ActionListener {
             loadCounter++;
             if (loadCounter > 1) {
                 System.out.println("Last session loaded already");
+
             }
             else {
                 try {
@@ -160,6 +236,7 @@ public class WindowFrame extends JFrame implements ActionListener {
                 } catch (IOException lackOfFileToReadFrom) {
                     System.out.println("There's no file to read from! Running from default settings.");
                 }
+
                 // amount of lines in file is the size of the array
                 customHorses = new Horse[linesLength];
                 for (int i = 0; i < customHorses.length; i++) {
@@ -168,6 +245,8 @@ public class WindowFrame extends JFrame implements ActionListener {
             }
 
             try {
+                JTextArea textArea = new JTextArea();
+
                 BufferedReader horseStateReader = new BufferedReader(new FileReader("horseData.txt"));
                 String currLine;
                 int currentIndex = 0;
@@ -184,6 +263,14 @@ public class WindowFrame extends JFrame implements ActionListener {
                     customHorses[currentIndex].setHorseBoots(currentLineComponents[4]);
                     currentIndex++;
                 }
+                for (int i = 0; i<customHorses.length; i++) {
+                    textArea.append("Name: " + customHorses[i].getName() + " - Rating: " + customHorses[i].getConfidence() + " - Boots: " + customHorses[i].getHorseBoots() + " - Coat: " + customHorses[i].getHorseCoat());
+                    textArea.append("\n");
+                }
+                JScrollPane scrollPane = new JScrollPane(textArea);
+                scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS); // Optional: Show vertical scrollbar always
+
+                JOptionPane.showMessageDialog(this, scrollPane, "Entries Loaded", JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException lackOfFileToReadFrom) {
                 System.out.println("There's no file to read from! Running from default settings.");
             }
@@ -191,12 +278,18 @@ public class WindowFrame extends JFrame implements ActionListener {
 
         if (e.getSource() == startButton) {
             if (customHorses != null) {
+                JTextArea textArea = new JTextArea();
+                for (int i = 0; i<customHorses.length; i++) {
+                    textArea.append("Name: " + customHorses[i].getName() + " - Rating: " + customHorses[i].getConfidence() + " - Boots: " + customHorses[i].getHorseBoots() + " - Coat: " + customHorses[i].getHorseCoat());
+                    textArea.append("\n");
+                }
+
                 this.dispose();
                 Race r = new Race(raceLengthDistance, customHorses.length);
                 for (int i = 0; i<customHorses.length; i++) {
                     r.addHorse(customHorses[i], (i+1));
                 }
-                r.startRace();
+                r.startRaceGUI();
                 System.out.println("race ended.. writing to file!");
 
             }
@@ -217,7 +310,7 @@ public class WindowFrame extends JFrame implements ActionListener {
                     r.addHorse(horse1, 1);
                     r.addHorse(horse2, 2);
                     r.addHorse(horse3, 3);
-                    r.startRace();
+                    r.startRaceGUI();
                     System.out.println("Race ended... writing to file!");
 
                 }
@@ -244,7 +337,7 @@ public class WindowFrame extends JFrame implements ActionListener {
                             break;
                         }
                         String confidenceRatingInput = JOptionPane.showInputDialog("Enter " + horseName + "'s confidence rating");
-                        if (confidenceRatingInput == null || confidenceRatingInput.isEmpty()) {
+                        if (confidenceRatingInput == null || confidenceRatingInput.isEmpty() || !isValidNumber(confidenceRatingInput)) {
                             JOptionPane.showMessageDialog(this, "Aborting Customisation");
                             break;
                         }
@@ -256,13 +349,13 @@ public class WindowFrame extends JFrame implements ActionListener {
                                 break;
                             }
                             codePointChar = symbol.charAt(0);
-                            horseCoat = JOptionPane.showInputDialog("Enter the Horse's Coat");
+                            horseCoat = JOptionPane.showInputDialog("Enter horse coat for horse: " + horseName);
                             if (horseCoat == null || horseCoat.isEmpty()) {
                                 JOptionPane.showMessageDialog(this, "Aborting Customisation");
                                 break;
                             }
 
-                            horseBoots = JOptionPane.showInputDialog("Enter horse boots for horse: " + customHorses[i]);
+                            horseBoots = JOptionPane.showInputDialog("Enter horse boots for horse: " + horseName);
                             if (horseBoots == null || horseBoots.isEmpty()) {
                                 JOptionPane.showMessageDialog(this, "Aborting Customisation");
                                 break;
@@ -283,5 +376,14 @@ public class WindowFrame extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(this, "Not a valid number");
             }
         }
+    }
+
+    public static boolean isValidNumber(String input) {
+        try {
+            double val = Double.parseDouble(input);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
     }
 }
