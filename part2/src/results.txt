@@ -1,0 +1,3 @@
+Zappy-Horse,8,♕,Palomino,Greygreen
+Data-Horse,15,♞,Bay,Black
+Server-Horse,9,♘,Chestnut,White
