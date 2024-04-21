@@ -20,7 +20,6 @@ public class Horse {
     private double horseConfidence; /* 0-1 */
     private String horseCoat;
     private String horseBoots;
-
     // Constructor of class Horse
 
     public Horse(char horseSymbol, String horseName, double horseConfidence, String horseCoat, String horseBoots) {
@@ -31,8 +30,9 @@ public class Horse {
         this.horseBoots = horseBoots;
     }
 
+
     public Horse() {
-        // black constructor
+        // blank constructor
     }
     // Other methods of class Horse
 

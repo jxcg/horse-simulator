@@ -149,6 +149,13 @@ public class Race {
         }
     }
 
+    public boolean isHorseFallen(Horse horses) {
+        if (horses.hasFallen()) {
+            return true;
+        }
+        return false;
+    }
+
     public Horse getFurthestHorse() {
         int furthestDistance = 0;
         Horse furthestHorse = null;
@@ -304,7 +311,6 @@ public class Race {
                 } catch (IOException e) {
                     System.err.println("Error writing to results file. See error logs for more");
                     System.out.println();
-                    System.out.println(e);
                 }
             }
 
