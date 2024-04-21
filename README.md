@@ -40,6 +40,13 @@ Notable Logs:
 **Dependencies**
 - This project requires Java Development Kit (JDK) to compile and run.
 - This program was made under JDK 21.0.2 "java version "21.0.2" within the IntelliJ IDEA Development Environment
+
+
+# *Version 2.0: GUI Version*
+
+**Dependencies**
+- This project requires Java Development Kit (JDK) to compile and run.
+- This program was made under JDK 21.0.2 "java version "21.0.2" within the IntelliJ IDEA Development Environment
 - Java Swing
 
 **Imports** 
@@ -55,9 +62,23 @@ Notable Logs:
 -  java.util.Objects;
 -  java.lang.Math;
 
+**Steps on running:**
+- *compile.sh file provided - just run . ./compile.sh within part2/src/*
+- **If this does not work, manually compile all the java provided, (Main.java, Race.java, WindowFrame.java, Horse.java, VirtualCurrency.java)**
+- javac Main.java
+- javac Race.java
+- javac WindowFrame.java
+- javac Horse.java
+- javac VirtualCurrency.java
+
+- Run java Main.java afterwards, it should run!
+
+- Note:
+- There is a duplicate set of horseData.txt and results.txt, as when running in src/ (terminal) - the game generates the files relative to the path the program is running within, within IntelliJ the files happen to be generated outside of src/, but within the terminal, the files are generated within src/, so a duplicate set is provided. If this does not load for whatever reason, appropriate error handling is still provided, and the files will automatically be created during normal usage of the game.
+- *results.txt* is a File that lets people see the last results of the horse game.
+- *horseData.txt* is a File that lets people load in the last results of the horse game into their current session, so they can continue where they left off.
 
 
-# *Version 2.0: GUI Version*
 
 **Features**
 
@@ -81,3 +102,6 @@ A comprehensive betting system is integrated into the game, allowing players to 
 
 ## 7. Interactive UI
 An intuitive, responsive UI makes the horse-simulator even more fun!
+<img width="1293" alt="Screenshot 2024-04-21 at 13 06 44" src="https://github.com/jxcg/horse-simulator/assets/154761377/1e2cc55c-0570-43c1-86dd-b6ecee3a53a0">
+
+
