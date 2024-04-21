@@ -46,7 +46,7 @@ After each race, the game displays performance metrics such as confidence rating
 Users have the ability to load previous horse setup profiles from a file, allowing them to easily reuse their favorite horse configurations.
 
 ## 3. View Horse Stats
-A dedicated UI component allows users to view detailed statistics and attributes of each horse. This includes information such as horse name, confidence rating, horse coat, and their boots.
+A dedicated UI component allows users to view detailed statistics and attributes of each horse's most recent race. This includes information such as horse name, confidence rating, horse coat, and their boots.
 
 ## 4. Interactive Track Design
 Players can customize the length of the race track and the number of lanes, providing an interactive and dynamic racing experience.
