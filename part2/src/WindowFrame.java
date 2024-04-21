@@ -76,7 +76,6 @@ public class WindowFrame extends JFrame implements ActionListener {
 
         buttonPanel.setBounds(0,350,this.getWidth(),150);
 
-
         buttonPanel.add(startButton);
         buttonPanel.add(customiseButton);
         buttonPanel.add(historyButton);
@@ -120,40 +119,55 @@ public class WindowFrame extends JFrame implements ActionListener {
     }
 
     public void placeBet() {
-        // Open a dialog for the user to place a bet
-        String betAmountString = JOptionPane.showInputDialog("Enter bet amount (you have " + VirtualCurrency.getCurrency() + " virtual currency):");
-        if (betAmountString != null) {
-            try {
-                betAmount = Integer.parseInt(betAmountString);
-                if (betAmount <= VirtualCurrency.getCurrencyNumber() && betAmount > 0) {
-                    // Allow the user to select a horse
-                    String[] horseNames = getHorseNames();
-                    selectedHorseName = (String) JOptionPane.showInputDialog(this, "Select a horse to bet on:",
-                            "Select Horse", JOptionPane.PLAIN_MESSAGE, null, horseNames, horseNames[0]);
-                    for (int i = 0; i<customHorses.length; i++) {
-                        if (customHorses[i].getName().equals(selectedHorseName)) {
-                            selectedHorse = customHorses[i];
+        // opens dialog for the user to place a bet
+        System.out.println(betAmount);
+        if (betAmount <= 0) {
+            String betAmountString = JOptionPane.showInputDialog("Enter bet amount (you have " + VirtualCurrency.getCurrency() + " virtual currency):");
+            if (betAmountString != null && this.customHorses != null) {
+                try {
+                    double betAmountConfirmation = Double.parseDouble(betAmountString);
+                    if (betAmountConfirmation <= VirtualCurrency.getCurrencyNumber() && betAmountConfirmation > 0) {
+                        // allow the user to select a horse
+                        String[] horseNames = getHorseNames();
+                        selectedHorseName = (String) JOptionPane.showInputDialog(this, "Select a horse to bet on:",
+                                "Select Horse", JOptionPane.PLAIN_MESSAGE, null, horseNames, horseNames[0]);
+                        for (int i = 0; i<customHorses.length; i++) {
+                            if (customHorses[i].getName().equals(selectedHorseName)) {
+                                selectedHorse = customHorses[i];
+                            }
+                        }
+
+                        if (selectedHorseName != null) {
+                            betAmount = betAmountConfirmation;
+                            System.out.println(betAmount);
+                            VirtualCurrency.setCurrency(VirtualCurrency.getCurrencyNumber() - betAmount);
+                            JOptionPane.showMessageDialog(this, "You bet: " + betAmount + " coins on " + selectedHorseName + "\nYour new balance is " + VirtualCurrency.getCurrency() + " coins\nIf your horse falls, you will lose " + (betAmount+(betAmount*0.2)) + " extra coins\nIf your horse loses but doesn't fall, you will lose " + (betAmount+(betAmount*0.1)) + " extra coins\nIf you win the race, you will gain " + (betAmount*1.6) + " coins from your current balance of " + VirtualCurrency.getCurrency() + " coins");
                         }
                     }
-
-                    if (selectedHorseName != null) {
-                        VirtualCurrency.setCurrency(VirtualCurrency.getCurrencyNumber() - betAmount);
-                        JOptionPane.showMessageDialog(this, "You bet: " + betAmount + " coins on " + selectedHorseName + "\n");
+                    else {
+                        if (VirtualCurrency.getCurrencyNumber() < 0) {
+                            JOptionPane.showMessageDialog(this, "You completely lost all your money, you need to restart!");
+                        }
+                        else {
+                            JOptionPane.showMessageDialog(this, "Invalid bet amount!");
+                        }
                     }
-                } else {
-                    if (VirtualCurrency.getCurrencyNumber() < 0) {
-                        JOptionPane.showMessageDialog(this, "You completely lost all your money, you need to restart!");
-                    }
-                    else {JOptionPane.showMessageDialog(this, "Invalid bet amount!"); }
                 }
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Invalid input! Please enter a valid number.");
+                catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(this, "Invalid input! Please enter a valid number.");
+                }
             }
+            else {
+                JOptionPane.showMessageDialog(this,"Operation cancelled - No horses loaded in or invalid bet amount");
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(this, "Ongoing bet: " + betAmount + " coins on " + selectedHorseName + "\nYour new balance is " + VirtualCurrency.getCurrency() + " coins\nIf your horse falls, you will lose " + (betAmount+(betAmount*0.2)) + " extra coins\nIf your horse loses but doesn't fall, you will lose " + (betAmount+(betAmount*0.1)) + " extra coins\nIf you win the race, you will gain " + (betAmount*1.6) + " coins from your current balance of " + VirtualCurrency.getCurrency() + " coins");
         }
     }
 
     private String[] getHorseNames() {
-        // Retrieve horse names from customHorses array
+        // gets horse names from customHorses array
         String[] horseNames = new String[customHorses.length];
         for (int i = 0; i < customHorses.length; i++) {
             horseNames[i] = customHorses[i].getName();
@@ -164,7 +178,6 @@ public class WindowFrame extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
         // exit button closes
         if (e.getSource() == exitButton) {
             System.exit(0);
@@ -351,7 +364,7 @@ public class WindowFrame extends JFrame implements ActionListener {
                     // if selected horse has just fell because of poor performance (and is not the winner)
                     // (20% coins extra on top of bet)
                     double valBeforeBet = VirtualCurrency.getCurrencyNumber();
-                    double extraLoss = betAmount * 0.2; // Calculating the extra 10% loss
+                    double extraLoss = betAmount * 0.2; // Calculating the extra 20% loss on top of bet cost
                     double totalLoss = betAmount + extraLoss; // Total loss including the initial bet
                     double userTotalLoss = betAmount + (betAmount+extraLoss);
                     VirtualCurrency.forceSubtract(totalLoss);
@@ -360,6 +373,7 @@ public class WindowFrame extends JFrame implements ActionListener {
                     double prevVal = VirtualCurrency.getCurrencyNumber() + totalLoss;
                     afterGameText.append("\nYou lost " + (totalLoss) + " extra coins! (Down from " + prevVal + " coins) " + "\nInitial balance before deduction: " + Math.round(prevVal+betAmount) + " coins");
                     afterGameText.append("\nYou lost " + (userTotalLoss) + " coins TOTAL from betting cost and the multiplier");
+                    afterGameText.append("\n\n( "+betAmount + " + " + totalLoss + " ) coins deducted");
                     afterGameText.append("\n\nValue solely after betting cost: " + valBeforeBet + " coins");
                     afterGameText.append("\nExtra Coins lost from the bet: " + totalLoss + "\n");
                     afterGameText.append("\nYou bet " + betAmount + " coins");
@@ -370,7 +384,7 @@ public class WindowFrame extends JFrame implements ActionListener {
                     // if selected horse has not fell but not won, user loses betAmount * 1.1 (10%)
                     // user loses 10% of coins on top of their bet (bet 10 coins, lose 11 coins extra (so they lost 21 coins))
                     double valBeforeBet = VirtualCurrency.getCurrencyNumber();
-                    double extraLoss = betAmount * 0.1; // Calculating the extra 10% loss
+                    double extraLoss = betAmount * 0.1; // Calculating the extra 20% loss on top of bet cost
                     double totalLoss = betAmount + extraLoss; // Total loss including the initial bet
                     double userTotalLoss = betAmount + (betAmount+extraLoss);
                     VirtualCurrency.forceSubtract(totalLoss);
@@ -379,6 +393,7 @@ public class WindowFrame extends JFrame implements ActionListener {
                     double prevVal = VirtualCurrency.getCurrencyNumber() + totalLoss;
                     afterGameText.append("\nYou lost " + (totalLoss) + " extra coins! (Down from " + prevVal + " coins) " + "\nInitial balance before deduction: " + Math.round(prevVal+betAmount) + " coins");
                     afterGameText.append("\nYou lost " + (userTotalLoss) + " coins TOTAL from betting cost and the multiplier");
+                    afterGameText.append("\n\n( "+betAmount + " + " + totalLoss + " ) coins deducted");
                     afterGameText.append("\n\nValue solely after betting cost: " + valBeforeBet + " coins");
                     afterGameText.append("\nExtra Coins lost from the bet: " + totalLoss + "\n");
                     afterGameText.append("\nYou bet " + betAmount + " coins");
