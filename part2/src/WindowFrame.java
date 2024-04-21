@@ -122,7 +122,7 @@ public class WindowFrame extends JFrame implements ActionListener {
         // opens dialog for the user to place a bet
         System.out.println(betAmount);
         if (betAmount <= 0) {
-            String betAmountString = JOptionPane.showInputDialog("Enter bet amount (you have " + VirtualCurrency.getCurrency() + " virtual currency):");
+            String betAmountString = JOptionPane.showInputDialog("Enter bet amount (you have " + VirtualCurrency.getCurrency() + " coins):");
             if (betAmountString != null && this.customHorses != null) {
                 try {
                     double betAmountConfirmation = Double.parseDouble(betAmountString);
@@ -315,6 +315,7 @@ public class WindowFrame extends JFrame implements ActionListener {
                 for (int i = 0; i<customHorses.length; i++) {
                     textArea.append("Name: " + customHorses[i].getName() + " - Rating: " + customHorses[i].getConfidence() + " - Boots: " + customHorses[i].getHorseBoots() + " - Coat: " + customHorses[i].getHorseCoat());
                     textArea.append("\n");
+                    textArea.setEditable(false);
                 }
                 JScrollPane scrollPane = new JScrollPane(textArea);
                 scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -351,9 +352,9 @@ public class WindowFrame extends JFrame implements ActionListener {
                         double prevVal = VirtualCurrency.getCurrencyNumber() - reward;
                         afterGameText.append("Coins Available: " + VirtualCurrency.getCurrency() + " coins \n");
                         afterGameText.append("Congratulations! You won " + reward + " coins! (Up from " + prevVal + " coins)\n");
-                        afterGameText.append("Coins won from the bet: " + reward + " ( " + reward + " + " + betAmount + ") \n");
+                        afterGameText.append("Coins won from the bet: " + reward + " (" + reward + ")\n");
                         afterGameText.append("You bet: " + betAmount + " coins\n");
-
+                        afterGameText.setEditable(false);
                     }
                     // if my Horse Falls
 
@@ -371,12 +372,11 @@ public class WindowFrame extends JFrame implements ActionListener {
                         double prevVal = VirtualCurrency.getCurrencyNumber() + totalLoss;
                         afterGameText.append("\nYou lost " + (totalLoss) + " extra coins! (Down from " + prevVal + " coins) " + "\nInitial balance before deduction: " + Math.round(prevVal+betAmount) + " coins");
                         afterGameText.append("\nYou lost " + (userTotalLoss) + " coins TOTAL from betting cost and the multiplier");
-                        afterGameText.append("\n\n( "+betAmount + " + " + totalLoss + " ) coins deducted");
+                        afterGameText.append("\n\n("+betAmount + " + " + totalLoss + ") coins deducted");
                         afterGameText.append("\n\nValue solely after betting cost: " + valBeforeBet + " coins");
                         afterGameText.append("\nExtra Coins lost from the bet: " + totalLoss + "\n");
                         afterGameText.append("\nYou bet " + betAmount + " coins");
-
-
+                        afterGameText.setEditable(false);
                     }
                     else {
                         // if selected horse has not fell but not won, user loses betAmount * 1.1 (10%)
@@ -391,10 +391,11 @@ public class WindowFrame extends JFrame implements ActionListener {
                         double prevVal = VirtualCurrency.getCurrencyNumber() + totalLoss;
                         afterGameText.append("\nYou lost " + (totalLoss) + " extra coins! (Down from " + prevVal + " coins) " + "\nInitial balance before deduction: " + Math.round(prevVal+betAmount) + " coins");
                         afterGameText.append("\nYou lost " + (userTotalLoss) + " coins TOTAL from betting cost and the multiplier");
-                        afterGameText.append("\n\n( "+betAmount + " + " + totalLoss + " ) coins deducted");
+                        afterGameText.append("\n\n("+betAmount + " + " + totalLoss + ") coins deducted");
                         afterGameText.append("\n\nValue solely after betting cost: " + valBeforeBet + " coins");
                         afterGameText.append("\nExtra Coins lost from the bet: " + totalLoss + "\n");
                         afterGameText.append("\nYou bet " + betAmount + " coins");
+                        afterGameText.setEditable(false);
                     }
                 }
 
@@ -432,7 +433,7 @@ public class WindowFrame extends JFrame implements ActionListener {
                     System.out.println("Race ended... writing to file!");
                     newScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
                     JOptionPane.showMessageDialog(this, newScrollPane, "Race Results", JOptionPane.INFORMATION_MESSAGE);
-
+                    afterGameText.setEditable(false);
                 }
                 else {
                     JOptionPane.showMessageDialog(this, "Click on Customise to create some!");
