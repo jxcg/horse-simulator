@@ -141,7 +141,7 @@ public class WindowFrame extends JFrame implements ActionListener {
                             betAmount = betAmountConfirmation;
                             System.out.println(betAmount);
                             VirtualCurrency.setCurrency(VirtualCurrency.getCurrencyNumber() - betAmount);
-                            JOptionPane.showMessageDialog(this, "You bet: " + betAmount + " coins on " + selectedHorseName + "\nYour new balance is " + VirtualCurrency.getCurrency() + " coins\nIf your horse falls, you will lose " + (betAmount+(betAmount*0.2)) + " extra coins\nIf your horse loses but doesn't fall, you will lose " + (betAmount+(betAmount*0.1)) + " extra coins\nIf you win the race, you will gain " + (betAmount*1.6) + " coins from your current balance of " + VirtualCurrency.getCurrency() + " coins");
+                            JOptionPane.showMessageDialog(this, "You bet: " + betAmount + " coins on " + selectedHorseName + "\nYour new balance is " + VirtualCurrency.getCurrency() + " coins\nIf your horse falls & loses, you will lose " + (betAmount+(betAmount*0.2)) + " extra coins\nIf your horse loses but doesn't fall, you will lose " + (betAmount+(betAmount*0.1)) + " extra coins\nIf you win the race, you will gain " + (betAmount*1.6) + " coins from your current balance of " + VirtualCurrency.getCurrency() + " coins");
                         }
                     }
                     else {
@@ -162,7 +162,7 @@ public class WindowFrame extends JFrame implements ActionListener {
             }
         }
         else {
-            JOptionPane.showMessageDialog(this, "Ongoing bet: " + betAmount + " coins on " + selectedHorseName + "\nYour new balance is " + VirtualCurrency.getCurrency() + " coins\nIf your horse falls, you will lose " + (betAmount+(betAmount*0.2)) + " extra coins\nIf your horse loses but doesn't fall, you will lose " + (betAmount+(betAmount*0.1)) + " extra coins\nIf you win the race, you will gain " + (betAmount*1.6) + " coins from your current balance of " + VirtualCurrency.getCurrency() + " coins");
+            JOptionPane.showMessageDialog(this, "Ongoing bet: " + betAmount + " coins on " + selectedHorseName + "\nYour new balance is " + VirtualCurrency.getCurrency() + " coins\nIf your horse falls & loses, you will lose " + (betAmount+(betAmount*0.2)) + " extra coins\nIf your horse loses but doesn't fall, you will lose " + (betAmount+(betAmount*0.1)) + " extra coins\nIf you win the race, you will gain " + (betAmount*1.6) + " coins from your current balance of " + VirtualCurrency.getCurrency() + " coins");
         }
     }
 
@@ -428,7 +428,6 @@ public class WindowFrame extends JFrame implements ActionListener {
                     r.addHorse(horse3, 3);
 
                     r.startRaceGUI(this.getLocation());
-                    System.out.println(r.getFurthestHorse());
                     afterGameText.append(r.getFurthestHorse().getName() + " has won the race!");
                     System.out.println("Race ended... writing to file!");
                     newScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -454,11 +453,14 @@ public class WindowFrame extends JFrame implements ActionListener {
                         if (horseName == null || horseName.isEmpty()) {
                             // user cancelled operation
                             JOptionPane.showMessageDialog(this, "Aborting Customisation");
+                            customHorses = null;
                             break;
                         }
                         String confidenceRatingInput = JOptionPane.showInputDialog("Enter " + horseName + "'s confidence rating");
                         if (confidenceRatingInput == null || confidenceRatingInput.isEmpty() || !isValidNumber(confidenceRatingInput)) {
                             JOptionPane.showMessageDialog(this, "Aborting Customisation");
+                            customHorses = null;
+
                             break;
                         }
                         try {
@@ -466,18 +468,24 @@ public class WindowFrame extends JFrame implements ActionListener {
                             symbol = JOptionPane.showInputDialog("What should " + horseName + " be represented by? " + "(" + (i+1) +")");
                             if (symbol == null || symbol.isEmpty()) {
                                 JOptionPane.showMessageDialog(this, "Aborting Customisation");
+                                customHorses = null;
+
                                 break;
                             }
                             codePointChar = symbol.charAt(0);
                             horseCoat = JOptionPane.showInputDialog("Enter horse coat for horse: " + horseName);
                             if (horseCoat == null || horseCoat.isEmpty()) {
                                 JOptionPane.showMessageDialog(this, "Aborting Customisation");
+                                customHorses = null;
+
                                 break;
                             }
 
                             horseBoots = JOptionPane.showInputDialog("Enter horse boots for horse: " + horseName);
                             if (horseBoots == null || horseBoots.isEmpty()) {
                                 JOptionPane.showMessageDialog(this, "Aborting Customisation");
+                                customHorses = null;
+
                                 break;
                             }
                             customHorses[i] = new Horse(codePointChar, horseName, confidenceRating, horseCoat, horseBoots);
