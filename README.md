@@ -27,12 +27,26 @@ Notable Logs:
 - Please run the game by cloning the repo (or downloading the files manually - whatever works best for you, and run 'java Main.java' within a Command Line Interface / Terminal (macOS or Unix))
 - This is **NOT** necessary, but it ensures that when the game is run, the game will not print out multiple lines of the same race track, as IntelliJ doesn't like to properly print out formfeed characters (despite the /u000c method and the clearScreen() method added).
 - Running the game in a developer environment console will work fine, however for the intended experience, running the game in the console is intended.
-- For markers, all files required to run will be provided directly via the .zip file
+- For markers, all files required to run will be provided directly via the .sip file
 
 **Dependencies**
 - This project requires Java Development Kit (JDK) to compile and run.
 - This program was made under JDK 21.0.2 "java version "21.0.2" within the IntelliJ IDEA Development Environment
-- 
+- Java Swing
+
+**Imports** 
+-  javax.imageio.ImageIO;
+-  javax.swing.*;
+-  java.awt.*;
+-  java.awt.event.ActionEvent;
+-  java.awt.event.ActionListener;
+-  java.awt.image.BufferedImage;
+-  java.io.BufferedReader;
+-  java.io.FileReader;
+-  java.io.IOException;
+-  java.util.Objects;
+-  java.lang.Math;
+
 
 
 # *Version 2.0: GUI Version*
@@ -49,12 +63,13 @@ Users have the ability to load previous horse setup profiles from a file, allowi
 A dedicated UI component allows users to view detailed statistics and attributes of each horse's most recent race. This includes information such as horse name, confidence rating, horse coat, and their boots.
 
 ## 4. Interactive Track Design
-Players can customize the length of the race track and the number of lanes, providing an interactive and dynamic racing experience.
+Players can customise the length of the race track and the number of lanes, providing an interactive and dynamic racing experience.
 
 ## 5. Custom Horses
-The game allows users to create and customize their own horses, choosing attributes such as their symbol, name, confidence rating, coat, and boots.
+The game allows users to create and customise their own horses, choosing attributes such as their symbol, name, confidence rating, coat, and boots.
 
 ## 6. Betting System
-A comprehensive betting system is integrated into the game, allowing players to place bets on their favorite horses and compete for virtual currency.
+A comprehensive betting system is integrated into the game, allowing players to place bets on their favorite horses and compete for coins (virtual currency).
 
-## 7. More Features Coming
+## 7. Interactive UI
+An intuitive, responsive UI makes the horse-simulator even more fun!
