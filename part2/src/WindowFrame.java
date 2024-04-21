@@ -239,7 +239,7 @@ public class WindowFrame extends JFrame implements ActionListener {
                     historyPanel.setBackground(Color.BLACK);
                 }
             } catch (IOException ex) {
-                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "No results for last game available");
             }
             getContentPane().add(historyPanel);
             backgroundPanel.add(historyPanel);
@@ -329,11 +329,6 @@ public class WindowFrame extends JFrame implements ActionListener {
             JTextArea afterGameText = new JTextArea();
             JScrollPane newScrollPane = new JScrollPane(afterGameText);
             if (customHorses != null) {
-                JTextArea textArea = new JTextArea();
-                for (int i = 0; i<customHorses.length; i++) {
-                    textArea.append("Name: " + customHorses[i].getName() + " - Rating: " + customHorses[i].getConfidence() + " - Boots: " + customHorses[i].getHorseBoots() + " - Coat: " + customHorses[i].getHorseCoat());
-                    textArea.append("\n");
-                }
                 Race r = new Race(raceLengthDistance, customHorses.length);
                 for (int i = 0; i<customHorses.length; i++) {
                     r.addHorse(customHorses[i], (i+1));
@@ -341,62 +336,70 @@ public class WindowFrame extends JFrame implements ActionListener {
                 this.dispose();
                 r.startRaceGUI(this.getLocation());
                 // if my horse wins
-                if (selectedHorse.equals(r.getFurthestHorse())) {
-                    System.out.println(VirtualCurrency.getCurrencyNumber());
-                    double reward = betAmount * 1.6;
-                    /* imagine i bet 15 coins from 100
+
+                // this statement only occurs if horse has been selected for a bet
+                if (selectedHorse != null) {
+                    if (selectedHorse.equals(r.getFurthestHorse())) {
+                        System.out.println(VirtualCurrency.getCurrencyNumber());
+                        double reward = betAmount * 1.6;
+                    /* I bet 15 coins from 100 coins balance
                        85 coins remaining
                        i win -> 15x1.6 = 24
                        85+24 = 109 (new balance)
                     */
-                    VirtualCurrency.addCurrency(reward);
-                    double prevVal = VirtualCurrency.getCurrencyNumber() - reward;
-                    afterGameText.append("Coins Available: " + VirtualCurrency.getCurrency() + " coins \n");
-                    afterGameText.append("Congratulations! You won " + reward + " coins! (Up from " + prevVal + " coins)\n");
-                    afterGameText.append("Coins won from the bet: " + reward + " ( " + reward + " + " + betAmount + ") \n");
-                    afterGameText.append("You bet: " + betAmount + " coins\n");
+                        VirtualCurrency.addCurrency(reward);
+                        double prevVal = VirtualCurrency.getCurrencyNumber() - reward;
+                        afterGameText.append("Coins Available: " + VirtualCurrency.getCurrency() + " coins \n");
+                        afterGameText.append("Congratulations! You won " + reward + " coins! (Up from " + prevVal + " coins)\n");
+                        afterGameText.append("Coins won from the bet: " + reward + " ( " + reward + " + " + betAmount + ") \n");
+                        afterGameText.append("You bet: " + betAmount + " coins\n");
 
+                    }
+                    // if my Horse Falls
+
+                    else if (r.isHorseFallen(selectedHorse)) {
+
+                        // if selected horse has just fell because of poor performance (and is not the winner)
+                        // (20% coins extra on top of bet)
+                        double valBeforeBet = VirtualCurrency.getCurrencyNumber();
+                        double extraLoss = betAmount * 0.2; // Calculating the extra 20% loss on top of bet cost
+                        double totalLoss = betAmount + extraLoss; // Total loss including the initial bet
+                        double userTotalLoss = betAmount + (betAmount+extraLoss);
+                        VirtualCurrency.forceSubtract(totalLoss);
+                        System.out.println(VirtualCurrency.getCurrencyNumber());
+                        afterGameText.append("Coins Available: " + VirtualCurrency.getCurrency() + " coins \n");
+                        double prevVal = VirtualCurrency.getCurrencyNumber() + totalLoss;
+                        afterGameText.append("\nYou lost " + (totalLoss) + " extra coins! (Down from " + prevVal + " coins) " + "\nInitial balance before deduction: " + Math.round(prevVal+betAmount) + " coins");
+                        afterGameText.append("\nYou lost " + (userTotalLoss) + " coins TOTAL from betting cost and the multiplier");
+                        afterGameText.append("\n\n( "+betAmount + " + " + totalLoss + " ) coins deducted");
+                        afterGameText.append("\n\nValue solely after betting cost: " + valBeforeBet + " coins");
+                        afterGameText.append("\nExtra Coins lost from the bet: " + totalLoss + "\n");
+                        afterGameText.append("\nYou bet " + betAmount + " coins");
+
+
+                    }
+                    else {
+                        // if selected horse has not fell but not won, user loses betAmount * 1.1 (10%)
+                        // user loses 10% of coins on top of their bet (bet 10 coins, lose 11 coins extra (so they lost 21 coins))
+                        double valBeforeBet = VirtualCurrency.getCurrencyNumber();
+                        double extraLoss = betAmount * 0.1; // Calculating the extra 20% loss on top of bet cost
+                        double totalLoss = betAmount + extraLoss; // Total loss including the initial bet
+                        double userTotalLoss = betAmount + (betAmount+extraLoss);
+                        VirtualCurrency.forceSubtract(totalLoss);
+                        System.out.println(VirtualCurrency.getCurrencyNumber());
+                        afterGameText.append("Coins Available: " + VirtualCurrency.getCurrency() + " coins \n");
+                        double prevVal = VirtualCurrency.getCurrencyNumber() + totalLoss;
+                        afterGameText.append("\nYou lost " + (totalLoss) + " extra coins! (Down from " + prevVal + " coins) " + "\nInitial balance before deduction: " + Math.round(prevVal+betAmount) + " coins");
+                        afterGameText.append("\nYou lost " + (userTotalLoss) + " coins TOTAL from betting cost and the multiplier");
+                        afterGameText.append("\n\n( "+betAmount + " + " + totalLoss + " ) coins deducted");
+                        afterGameText.append("\n\nValue solely after betting cost: " + valBeforeBet + " coins");
+                        afterGameText.append("\nExtra Coins lost from the bet: " + totalLoss + "\n");
+                        afterGameText.append("\nYou bet " + betAmount + " coins");
+                    }
                 }
-                // if my Horse Falls
 
-                else if (r.isHorseFallen(selectedHorse)) {
-
-                    // if selected horse has just fell because of poor performance (and is not the winner)
-                    // (20% coins extra on top of bet)
-                    double valBeforeBet = VirtualCurrency.getCurrencyNumber();
-                    double extraLoss = betAmount * 0.2; // Calculating the extra 20% loss on top of bet cost
-                    double totalLoss = betAmount + extraLoss; // Total loss including the initial bet
-                    double userTotalLoss = betAmount + (betAmount+extraLoss);
-                    VirtualCurrency.forceSubtract(totalLoss);
-                    System.out.println(VirtualCurrency.getCurrencyNumber());
-                    afterGameText.append("Coins Available: " + VirtualCurrency.getCurrency() + " coins \n");
-                    double prevVal = VirtualCurrency.getCurrencyNumber() + totalLoss;
-                    afterGameText.append("\nYou lost " + (totalLoss) + " extra coins! (Down from " + prevVal + " coins) " + "\nInitial balance before deduction: " + Math.round(prevVal+betAmount) + " coins");
-                    afterGameText.append("\nYou lost " + (userTotalLoss) + " coins TOTAL from betting cost and the multiplier");
-                    afterGameText.append("\n\n( "+betAmount + " + " + totalLoss + " ) coins deducted");
-                    afterGameText.append("\n\nValue solely after betting cost: " + valBeforeBet + " coins");
-                    afterGameText.append("\nExtra Coins lost from the bet: " + totalLoss + "\n");
-                    afterGameText.append("\nYou bet " + betAmount + " coins");
-
-
-                }
                 else {
-                    // if selected horse has not fell but not won, user loses betAmount * 1.1 (10%)
-                    // user loses 10% of coins on top of their bet (bet 10 coins, lose 11 coins extra (so they lost 21 coins))
-                    double valBeforeBet = VirtualCurrency.getCurrencyNumber();
-                    double extraLoss = betAmount * 0.1; // Calculating the extra 20% loss on top of bet cost
-                    double totalLoss = betAmount + extraLoss; // Total loss including the initial bet
-                    double userTotalLoss = betAmount + (betAmount+extraLoss);
-                    VirtualCurrency.forceSubtract(totalLoss);
-                    System.out.println(VirtualCurrency.getCurrencyNumber());
-                    afterGameText.append("Coins Available: " + VirtualCurrency.getCurrency() + " coins \n");
-                    double prevVal = VirtualCurrency.getCurrencyNumber() + totalLoss;
-                    afterGameText.append("\nYou lost " + (totalLoss) + " extra coins! (Down from " + prevVal + " coins) " + "\nInitial balance before deduction: " + Math.round(prevVal+betAmount) + " coins");
-                    afterGameText.append("\nYou lost " + (userTotalLoss) + " coins TOTAL from betting cost and the multiplier");
-                    afterGameText.append("\n\n( "+betAmount + " + " + totalLoss + " ) coins deducted");
-                    afterGameText.append("\n\nValue solely after betting cost: " + valBeforeBet + " coins");
-                    afterGameText.append("\nExtra Coins lost from the bet: " + totalLoss + "\n");
-                    afterGameText.append("\nYou bet " + betAmount + " coins");
+                    afterGameText.append(r.getFurthestHorse().getName() + " has won the race!");
                 }
 
                 newScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -424,7 +427,11 @@ public class WindowFrame extends JFrame implements ActionListener {
                     r.addHorse(horse3, 3);
 
                     r.startRaceGUI(this.getLocation());
+                    System.out.println(r.getFurthestHorse());
+                    afterGameText.append(r.getFurthestHorse().getName() + " has won the race!");
                     System.out.println("Race ended... writing to file!");
+                    newScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+                    JOptionPane.showMessageDialog(this, newScrollPane, "Race Results", JOptionPane.INFORMATION_MESSAGE);
 
                 }
                 else {
