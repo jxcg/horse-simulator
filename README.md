@@ -25,8 +25,8 @@ Notable Logs:
 **Prerequisites**
 - In order to run the game, within src/ the three main classes have been provided.
 - Please run the game by cloning the repo (or downloading the files manually - whatever works best for you, and run 'java Main.java' within a Command Line Interface / Terminal (macOS or Unix))
-- This is **NOT** necessary, but it ensures that when the game is run, the game will not print out multiple lines of the same race track (which happens in IntelliJ, despite the /u000c method and the clearScreen() method added).
-- Running the game in a developer environment console will work fine.
+- This is **NOT** necessary, but it ensures that when the game is run, the game will not print out multiple lines of the same race track, as IntelliJ doesn't like to properly print out formfeed characters (despite the /u000c method and the clearScreen() method added).
+- Running the game in a developer environment console will work fine, however for the intended experience, running the game in the console is intended.
 - For markers, all files required to run will be provided directly via the .zip file
 
 **Dependencies**
