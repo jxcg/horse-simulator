@@ -63,6 +63,7 @@ Notable Logs:
 -  java.lang.Math;
 
 **Steps on running:**
+**Class files already provided! If required to be generated again, please follow steps below:**
 - *compile.sh file provided - just run . ./compile.sh within part2/src/*
 - **If this does not work, manually compile all the java provided, (Main.java, Race.java, WindowFrame.java, Horse.java, VirtualCurrency.java)**
 - javac Main.java
