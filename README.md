@@ -2,23 +2,59 @@
 
 **Author:** Joshua Cameron Ng
 
-This is a University project as part of coursework for Object Oriented Programming, this coursework is underway in order to prove that I am able to effectively write programs within an Object-Oriented style without failing.
+This is a University project as part of coursework for Object Oriented Programming.
+
+This project is divided into two parts, part1 and part2, with part1 referring to the command-line version of the game, whereas part2 refers to the graphical interface version of the game.
+
+
 
 Notable Logs:
 
 **Command Line Project**
 
-# *Version 1.1: 21/3/2024*
+# *Version 1.1: Modifications made*
 - Added message to denote winning horse.
 - Added a Unicode 'Cross' Emoji to denote fallen horse
 - Added Current confidence via .getConfidence() within the current race next to each horse's name
 - Decrement a Horse's current confidence if they fall
 - Increment a Horse's current confidence if they win
+- Horse name added to the side to allow for identification of each horse.
+- Only have one table printed out, rather than multiple tables each time a horse moves. (Cleaner console).
+- If all horses fall, winner horse is determined by furthest horse
+
+**Prerequisites**
+- In order to run the game, within src/ the three main classes have been provided.
+- Please run the game by cloning the repo (or downloading the files manually - whatever works best for you, and run 'java Main.java' within a Command Line Interface / Terminal (macOS or Unix))
+- This is **NOT** necessary, but it ensures that when the game is run, the game will not print out multiple lines of the same race track (which happens in IntelliJ, despite the /u000c method and the clearScreen() method added).
+- Running the game in a developer environment console will work fine.
+- For markers, all files required to run will be provided directly via the .zip file
+
+**Dependencies**
+- This project requires Java Development Kit (JDK) to compile and run.
+- This program was made under JDK 21.0.2 "java version "21.0.2" within the IntelliJ IDEA Development Environment
+- 
 
 
+# *Version 2.0: GUI Version*
 
-# *Version 2.0: GUI Version [2/4/2024]*
+**Features**
 
-Will need to implement certain features such as a virtual betting system, etc. within the UI
-(in Swing) in order to allow the user to interact with
-the application in a more natural way, in contrast to via the command line.
+## 1. Display Performance Metrics
+After each race, the game displays performance metrics such as confidence rating and finishing time for each horse on the user interface.
+
+## 2. Load Previous Horse Setup Profile
+Users have the ability to load previous horse setup profiles from a file, allowing them to easily reuse their favorite horse configurations.
+
+## 3. View Horse Stats
+A dedicated UI component allows users to view detailed statistics and attributes of each horse. This includes information such as horse name, confidence rating, horse coat, and their boots.
+
+## 4. Interactive Track Design
+Players can customize the length of the race track and the number of lanes, providing an interactive and dynamic racing experience.
+
+## 5. Custom Horses
+The game allows users to create and customize their own horses, choosing attributes such as their symbol, name, confidence rating, coat, and boots.
+
+## 6. Betting System
+A comprehensive betting system is integrated into the game, allowing players to place bets on their favorite horses and compete for virtual currency.
+
+## 7. More Features Coming
