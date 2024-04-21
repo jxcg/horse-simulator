@@ -27,7 +27,15 @@ Notable Logs:
 - Please run the game by cloning the repo (or downloading the files manually - whatever works best for you, and run 'java Main.java' within a Command Line Interface / Terminal (macOS or Unix))
 - This is **NOT** necessary, but it ensures that when the game is run, the game will not print out multiple lines of the same race track, as IntelliJ doesn't like to properly print out formfeed characters (despite the /u000c method and the clearScreen() method added).
 - Running the game in a developer environment console will work fine, however for the intended experience, running the game in the console is intended.
-- For markers, all files required to run will be provided directly via the .sip file
+- For markers, all files required to run will be provided directly via the .zip file
+
+- How to run the game:
+- Clone repository, if there are no classes available, please use 'javac File.java' to compile the available java files provided within the src/ folder
+- Run "java Main.java" to produce expected results
+- Example of a game:
+<img width="522" alt="Screenshot 2024-04-21 at 13 06 00" src="https://github.com/jxcg/horse-simulator/assets/154761377/3216f12c-0805-4fb8-aeb3-a39748dfb7bc">
+
+
 
 **Dependencies**
 - This project requires Java Development Kit (JDK) to compile and run.
