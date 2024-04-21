@@ -14,24 +14,34 @@ public class WindowFrame extends JFrame implements ActionListener {
     public JButton startButton = new JButton("Play");
     public JButton customiseButton = new JButton("Customise");
     public JButton historyButton = new JButton("History");
-    public JButton loadButton = new JButton("Load from Save");
+    public JButton loadButton = new JButton("Load Save");
     public JButton betButton = new JButton("Bet");
     public JButton customiseTrackLengthButton = new JButton("Track Length");
     public JButton exitButton = new JButton("Exit");
     public BufferedImage backgroundImage;
-    public Horse horse1;
-    public Horse horse2;
-    public Horse horse3;
     char codePointChar;
     String symbol;
     String horseName;
-    double confidenceRating;
+    String horseBoots;
     String horseCoat;
     private Horse[] customHorses;
-    int raceLengthDistance = 15;
+    int raceLengthDistance = 15; // default race length distance
     int linesLength = 0;
+    double confidenceRating;
+    int loadCounter = 0;
+    JPanel authorPanel;
+    JPanel textPanel;
+    JPanel historyPanel;
+    JPanel buttonPanel;
+    JButton historyBackButton;
+    JPanel backgroundPanel;
+    String selectedHorseName;
+    Horse selectedHorse;
+    double betAmount;
+
 
     public WindowFrame(String programTitle)  {
+        System.out.println(VirtualCurrency.getCurrency());
         // sets program to be visible, 1280x720, halts on close
         this.setVisible(true);
         this.setLayout(null);
@@ -40,9 +50,8 @@ public class WindowFrame extends JFrame implements ActionListener {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setTitle(programTitle);
 
-
-        JPanel textPanel = new JPanel();
-        JPanel authorPanel = new JPanel();
+        textPanel = new JPanel();
+        authorPanel = new JPanel();
 
         this.add(textPanel);
         textPanel.setOpaque(false);
@@ -52,27 +61,22 @@ public class WindowFrame extends JFrame implements ActionListener {
 
         authorPanel.setBounds(0,300,this.getWidth(), 25);
 
-        // authorPanel.setBackground(Color.CYAN);
-
         textPanel.setBounds(0,250,this.getWidth(),50);
-
-        // textPanel.setBackground(Color.GREEN);
-
 
         JLabel title = new JLabel(programTitle);
         title.setFont(new Font("Helvetica", Font.BOLD, 48));
         title.setForeground(Color.WHITE);
-        JLabel author = new JLabel("Author: Joshua Cameron Ng - SID: 230309485 ");
+        JLabel author = new JLabel("Author: Joshua Cameron Ng - SID: 230309485");
         author.setForeground(Color.LIGHT_GRAY);
         textPanel.add(title);
         authorPanel.add(author);
-        JPanel buttonPanel = new JPanel();
+        buttonPanel = new JPanel();
         this.add(buttonPanel);
         buttonPanel.setOpaque(false);
 
         buttonPanel.setBounds(0,350,this.getWidth(),150);
 
-        //buttonPanel.setBackground(Color.RED);
+
         buttonPanel.add(startButton);
         buttonPanel.add(customiseButton);
         buttonPanel.add(historyButton);
@@ -96,17 +100,14 @@ public class WindowFrame extends JFrame implements ActionListener {
         customiseTrackLengthButton.addActionListener(this);
         exitButton.addActionListener(this);
 
-
-
-
         try {
             backgroundImage = ImageIO.read(Objects.requireNonNull(getClass().getResource("resources/background.jpeg")));
-        } catch (NullPointerException | IOException e) {
-            e.printStackTrace();
+        } catch (NullPointerException | IOException error) {
+            error.printStackTrace();
             System.out.println("Unable to load background image from source :( ");
         }
 
-        JPanel backgroundPanel = new JPanel() {
+        backgroundPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -117,11 +118,124 @@ public class WindowFrame extends JFrame implements ActionListener {
         this.add(backgroundPanel);
 
     }
+
+    public void placeBet() {
+        // Open a dialog for the user to place a bet
+        String betAmountString = JOptionPane.showInputDialog("Enter bet amount (you have " + VirtualCurrency.getCurrency() + " virtual currency):");
+        if (betAmountString != null) {
+            try {
+                betAmount = Integer.parseInt(betAmountString);
+                if (betAmount <= VirtualCurrency.getCurrencyNumber() && betAmount > 0) {
+                    // Allow the user to select a horse
+                    String[] horseNames = getHorseNames();
+                    selectedHorseName = (String) JOptionPane.showInputDialog(this, "Select a horse to bet on:",
+                            "Select Horse", JOptionPane.PLAIN_MESSAGE, null, horseNames, horseNames[0]);
+                    for (int i = 0; i<customHorses.length; i++) {
+                        if (customHorses[i].getName().equals(selectedHorseName)) {
+                            selectedHorse = customHorses[i];
+                        }
+                    }
+
+                    if (selectedHorseName != null) {
+                        VirtualCurrency.setCurrency(VirtualCurrency.getCurrencyNumber() - betAmount);
+                        JOptionPane.showMessageDialog(this, "You bet: " + betAmount + " coins on " + selectedHorseName + "\n");
+                    }
+                } else {
+                    if (VirtualCurrency.getCurrencyNumber() < 0) {
+                        JOptionPane.showMessageDialog(this, "You completely lost all your money, you need to restart!");
+                    }
+                    else {JOptionPane.showMessageDialog(this, "Invalid bet amount!"); }
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Invalid input! Please enter a valid number.");
+            }
+        }
+    }
+
+    private String[] getHorseNames() {
+        // Retrieve horse names from customHorses array
+        String[] horseNames = new String[customHorses.length];
+        for (int i = 0; i < customHorses.length; i++) {
+            horseNames[i] = customHorses[i].getName();
+        }
+        return horseNames;
+    }
+
+
     @Override
     public void actionPerformed(ActionEvent e) {
+
         // exit button closes
         if (e.getSource() == exitButton) {
             System.exit(0);
+        }
+        if (e.getSource() == betButton) {
+            placeBet();
+        }
+
+        if (e.getSource() == historyButton) {
+            textPanel.setVisible(false);
+            authorPanel.setVisible(false);
+            buttonPanel.setVisible(false);
+            historyPanel = new JPanel();
+            backgroundPanel.setLayout(new GridBagLayout());
+
+            GridBagConstraints constraints = new GridBagConstraints();
+            constraints.gridx = 0;
+            constraints.gridy = 1;
+            constraints.weightx = 1.0;
+            constraints.weighty = 1.0;
+            constraints.fill = GridBagConstraints.BOTH;
+
+            backgroundPanel.add(historyPanel, constraints);
+            historyBackButton = new JButton("Back");
+            historyBackButton.setContentAreaFilled(false);
+            historyBackButton.setFocusable(false);
+            historyPanel.add(historyBackButton);
+            historyPanel.setVisible(true);
+            historyPanel.setOpaque(false); // makes background transparent [FALSE]
+
+
+            historyBackButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    textPanel.setVisible(true);
+                    authorPanel.setVisible(true);
+                    buttonPanel.setVisible(true);
+                    historyPanel.setVisible(false);
+                    historyBackButton.setVisible(false);
+                }
+            });
+
+            try (BufferedReader reader = new BufferedReader(new FileReader("results.txt"))) {
+                String line;
+                JLabel lastGame = new JLabel("Results of Last Game:      ");
+                lastGame.setForeground(Color.white);
+                Font results = new Font("Helvetica", Font.BOLD, 24);  // make a new font object
+
+                lastGame.setFont(results);
+                historyPanel.add(lastGame);
+                while ((line = reader.readLine()) != null) {
+                    String[] parts = line.split(",");
+                    JLabel horseLabel = new JLabel("<html><b>Name:</b> " + parts[0] + "<br><b>Distance Travelled:</b> " + parts[1] + "<br><b>Symbol:</b> " + parts[2] + "<br><b>Horse Coat:</b> " + parts[3] + "<br><b>Boots:</b> " + parts[4] + "<br><br></html>");
+                    JLabel breaks = new JLabel("<html><br><br></html>");
+
+                    horseLabel.setForeground(Color.white);
+                    historyPanel.add(breaks);
+                    historyPanel.add(horseLabel);
+                    historyPanel.setBackground(Color.BLACK);
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            getContentPane().add(historyPanel);
+            backgroundPanel.add(historyPanel);
+            historyPanel.setOpaque(false);
+
+            textPanel.setVisible(false);
+            authorPanel.setVisible(false);
+            buttonPanel.setVisible(false);
+            historyPanel.setVisible(true);
         }
 
         if (e.getSource() == customiseTrackLengthButton) {
@@ -142,29 +256,37 @@ public class WindowFrame extends JFrame implements ActionListener {
         }
 
         if (e.getSource() == loadButton) {
-            try {
-                BufferedReader lengthCounter = new BufferedReader(new FileReader("horseData.txt"));
-                while ((lengthCounter.readLine()) != null) {
-                    linesLength++;
-                    System.out.println(linesLength + " entries");
+            loadCounter++;
+            if (loadCounter > 1) {
+                System.out.println("Last session loaded already");
+            }
+            else {
+                try {
+                    BufferedReader lengthCounter = new BufferedReader(new FileReader("horseData.txt"));
+                    while ((lengthCounter.readLine()) != null) {
+                        linesLength++;
+                        System.out.println(linesLength + " entries");
+                    }
+                    JOptionPane.showMessageDialog(this,"Last session loaded successfully");
+
+
+                } catch (IOException lackOfFileToReadFrom) {
+                    System.out.println("There's no file to read from! Running from default settings.");
                 }
 
-            } catch (IOException lackOfFileToReadFrom) {
-                System.out.println("There's no file to read from! Running from default settings.");
+                // amount of lines in file is the size of the array
+                customHorses = new Horse[linesLength];
+                for (int i = 0; i < customHorses.length; i++) {
+                    customHorses[i] = new Horse();
+                }
             }
-            // amount of lines in file is the size of the array
-            customHorses = new Horse[linesLength];
-            for (int i = 0; i<customHorses.length; i++) {
-                customHorses[i] = new Horse();
-            }
-            System.out.println(linesLength);
 
             try {
+                JTextArea textArea = new JTextArea();
                 BufferedReader horseStateReader = new BufferedReader(new FileReader("horseData.txt"));
                 String currLine;
                 int currentIndex = 0;
                 while ((currLine = horseStateReader.readLine()) != null) {
-                    System.out.println(currLine);
                     String[] currentLineComponents = currLine.split(",");
                     for (int i = 0; i<currentLineComponents.length; i++) {
                         System.out.println(currentLineComponents[i]);
@@ -174,30 +296,108 @@ public class WindowFrame extends JFrame implements ActionListener {
                     customHorses[currentIndex].setHorseName(currentLineComponents[1]);
                     customHorses[currentIndex].setConfidence(Double.parseDouble(currentLineComponents[2]));
                     customHorses[currentIndex].setHorseCoat(currentLineComponents[3]);
+                    customHorses[currentIndex].setHorseBoots(currentLineComponents[4]);
                     currentIndex++;
                 }
+                for (int i = 0; i<customHorses.length; i++) {
+                    textArea.append("Name: " + customHorses[i].getName() + " - Rating: " + customHorses[i].getConfidence() + " - Boots: " + customHorses[i].getHorseBoots() + " - Coat: " + customHorses[i].getHorseCoat());
+                    textArea.append("\n");
+                }
+                JScrollPane scrollPane = new JScrollPane(textArea);
+                scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
+                JOptionPane.showMessageDialog(this, scrollPane, "Entries Loaded", JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException lackOfFileToReadFrom) {
                 System.out.println("There's no file to read from! Running from default settings.");
             }
         }
 
         if (e.getSource() == startButton) {
+            JTextArea afterGameText = new JTextArea();
+            JScrollPane newScrollPane = new JScrollPane(afterGameText);
             if (customHorses != null) {
-                this.dispose();
+                JTextArea textArea = new JTextArea();
+                for (int i = 0; i<customHorses.length; i++) {
+                    textArea.append("Name: " + customHorses[i].getName() + " - Rating: " + customHorses[i].getConfidence() + " - Boots: " + customHorses[i].getHorseBoots() + " - Coat: " + customHorses[i].getHorseCoat());
+                    textArea.append("\n");
+                }
                 Race r = new Race(raceLengthDistance, customHorses.length);
                 for (int i = 0; i<customHorses.length; i++) {
                     r.addHorse(customHorses[i], (i+1));
                 }
-                r.startRace();
+                this.dispose();
+                r.startRaceGUI(this.getLocation());
+                // if my horse wins
+                if (selectedHorse.equals(r.getFurthestHorse())) {
+                    System.out.println(VirtualCurrency.getCurrencyNumber());
+                    double reward = betAmount * 1.6;
+                    /* imagine i bet 15 coins from 100
+                       85 coins remaining
+                       i win -> 15x1.6 = 24
+                       85+24 = 109 (new balance)
+                    */
+                    VirtualCurrency.addCurrency(reward);
+                    double prevVal = VirtualCurrency.getCurrencyNumber() - reward;
+                    afterGameText.append("Coins Available: " + VirtualCurrency.getCurrency() + " coins \n");
+                    afterGameText.append("Congratulations! You won " + reward + " coins! (Up from " + prevVal + " coins)\n");
+                    afterGameText.append("Coins won from the bet: " + reward + " ( " + reward + " + " + betAmount + ") \n");
+                    afterGameText.append("You bet: " + betAmount + " coins\n");
+
+                }
+                // if my Horse Falls
+
+                else if (r.isHorseFallen(selectedHorse)) {
+
+                    // if selected horse has just fell because of poor performance (and is not the winner)
+                    // (20% coins extra on top of bet)
+                    double valBeforeBet = VirtualCurrency.getCurrencyNumber();
+                    double extraLoss = betAmount * 0.2; // Calculating the extra 10% loss
+                    double totalLoss = betAmount + extraLoss; // Total loss including the initial bet
+                    double userTotalLoss = betAmount + (betAmount+extraLoss);
+                    VirtualCurrency.forceSubtract(totalLoss);
+                    System.out.println(VirtualCurrency.getCurrencyNumber());
+                    afterGameText.append("Coins Available: " + VirtualCurrency.getCurrency() + " coins \n");
+                    double prevVal = VirtualCurrency.getCurrencyNumber() + totalLoss;
+                    afterGameText.append("\nYou lost " + (totalLoss) + " extra coins! (Down from " + prevVal + " coins) " + "\nInitial balance before deduction: " + Math.round(prevVal+betAmount) + " coins");
+                    afterGameText.append("\nYou lost " + (userTotalLoss) + " coins TOTAL from betting cost and the multiplier");
+                    afterGameText.append("\n\nValue solely after betting cost: " + valBeforeBet + " coins");
+                    afterGameText.append("\nExtra Coins lost from the bet: " + totalLoss + "\n");
+                    afterGameText.append("\nYou bet " + betAmount + " coins");
+
+
+                }
+                else {
+                    // if selected horse has not fell but not won, user loses betAmount * 1.1 (10%)
+                    // user loses 10% of coins on top of their bet (bet 10 coins, lose 11 coins extra (so they lost 21 coins))
+                    double valBeforeBet = VirtualCurrency.getCurrencyNumber();
+                    double extraLoss = betAmount * 0.1; // Calculating the extra 10% loss
+                    double totalLoss = betAmount + extraLoss; // Total loss including the initial bet
+                    double userTotalLoss = betAmount + (betAmount+extraLoss);
+                    VirtualCurrency.forceSubtract(totalLoss);
+                    System.out.println(VirtualCurrency.getCurrencyNumber());
+                    afterGameText.append("Coins Available: " + VirtualCurrency.getCurrency() + " coins \n");
+                    double prevVal = VirtualCurrency.getCurrencyNumber() + totalLoss;
+                    afterGameText.append("\nYou lost " + (totalLoss) + " extra coins! (Down from " + prevVal + " coins) " + "\nInitial balance before deduction: " + Math.round(prevVal+betAmount) + " coins");
+                    afterGameText.append("\nYou lost " + (userTotalLoss) + " coins TOTAL from betting cost and the multiplier");
+                    afterGameText.append("\n\nValue solely after betting cost: " + valBeforeBet + " coins");
+                    afterGameText.append("\nExtra Coins lost from the bet: " + totalLoss + "\n");
+                    afterGameText.append("\nYou bet " + betAmount + " coins");
+                }
+
+                newScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+                JOptionPane.showMessageDialog(this, newScrollPane, "Race Results", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println("Race ended... writing to file!");
+
+
             }
             else {
                 int dialogResult = JOptionPane.showConfirmDialog(this, "You didn't make any horses! Can I start the game with preset one?");
                 if (dialogResult == JOptionPane.YES_OPTION) {
                     this.dispose();
                     // Default Case is 3 horses and 3 tracks
-                    horse1 = new Horse(codePointChar, "Zappy-Horse", 0.46, "Palomino");
-                    horse2 = new Horse(codePointChar,"Data-Horse", 0.5, "Bay");
-                    horse3 = new Horse(codePointChar,"Server-Horse", 0.5, "Chestnut");
+                    Horse horse1 = new Horse(codePointChar, "Zappy-Horse", 0.46, "Palomino", "Greygreen");
+                    Horse horse2 = new Horse(codePointChar,"Data-Horse", 0.5, "Bay", "Black");
+                    Horse horse3 = new Horse(codePointChar,"Server-Horse", 0.5, "Chestnut", "White");
 
                     horse1.setSymbol('♕');
                     horse2.setSymbol('♞');
@@ -207,8 +407,10 @@ public class WindowFrame extends JFrame implements ActionListener {
                     r.addHorse(horse1, 1);
                     r.addHorse(horse2, 2);
                     r.addHorse(horse3, 3);
-                    r.startRace();
-                    System.out.println("race ended.. writing to file!");
+
+                    r.startRaceGUI(this.getLocation());
+                    System.out.println("Race ended... writing to file!");
+
                 }
                 else {
                     JOptionPane.showMessageDialog(this, "Click on Customise to create some!");
@@ -223,8 +425,8 @@ public class WindowFrame extends JFrame implements ActionListener {
                 if (tracksAsString != null) {
                     int tracks = Integer.parseInt(tracksAsString);
                     customHorses = new Horse[tracks];
-                    //System.out.println(raceLengthDistance);
                     for (int i = 0; i<customHorses.length; i++) {
+
                         horseName = JOptionPane.showInputDialog("Enter the name of your horse " + "(" + (i+1) +")");
                         if (horseName == null || horseName.isEmpty()) {
                             // user cancelled operation
@@ -232,7 +434,7 @@ public class WindowFrame extends JFrame implements ActionListener {
                             break;
                         }
                         String confidenceRatingInput = JOptionPane.showInputDialog("Enter " + horseName + "'s confidence rating");
-                        if (confidenceRatingInput == null || confidenceRatingInput.isEmpty()) {
+                        if (confidenceRatingInput == null || confidenceRatingInput.isEmpty() || !isValidNumber(confidenceRatingInput)) {
                             JOptionPane.showMessageDialog(this, "Aborting Customisation");
                             break;
                         }
@@ -244,25 +446,37 @@ public class WindowFrame extends JFrame implements ActionListener {
                                 break;
                             }
                             codePointChar = symbol.charAt(0);
-                            horseCoat = JOptionPane.showInputDialog("Enter the Horse's Coat");
+                            horseCoat = JOptionPane.showInputDialog("Enter horse coat for horse: " + horseName);
                             if (horseCoat == null || horseCoat.isEmpty()) {
                                 JOptionPane.showMessageDialog(this, "Aborting Customisation");
                                 break;
                             }
 
-
-                            customHorses[i] = new Horse(codePointChar, horseName, confidenceRating, horseCoat);
+                            horseBoots = JOptionPane.showInputDialog("Enter horse boots for horse: " + horseName);
+                            if (horseBoots == null || horseBoots.isEmpty()) {
+                                JOptionPane.showMessageDialog(this, "Aborting Customisation");
+                                break;
+                            }
+                            customHorses[i] = new Horse(codePointChar, horseName, confidenceRating, horseCoat, horseBoots);
                         }
                         catch (NumberFormatException error) {
                             JOptionPane.showMessageDialog(this, confidenceRatingInput + " is not a valid number");
                         }
                     }
                 }
-
             }
             catch (NumberFormatException error) {
                 JOptionPane.showMessageDialog(this, "Not a valid number");
             }
         }
+    }
+
+    public static boolean isValidNumber(String input) {
+        try {
+            Double.parseDouble(input);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
     }
 }

@@ -1,3 +1,5 @@
+import javax.swing.*;
+import java.awt.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -16,6 +18,11 @@ import java.lang.Math;
 public class Race {
     private int raceLength;
     private Horse[] horses;
+    long startTime;
+    long endTime;
+    long finishingTime;
+    private JTextArea raceOutput;
+    JButton openMainMenu;
 
     /**
      * Constructor for objects of class Race
@@ -27,14 +34,11 @@ public class Race {
         // initialise instance variables
         raceLength = distance;
         horses = new Horse[amountOfHorses];
+        raceOutput = new JTextArea();
+        raceOutput.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        raceOutput.setEditable(false);
     }
 
-    /**
-     * Adds a horse to the race in a given lane
-     *
-     * @param theHorse the horse to be added to the race
-     * @param laneNumber the lane that the horse will be added to
-     */
     public void addHorse(Horse theHorse, int laneNumber) {
         if (laneNumber >= 1 && laneNumber <= horses.length) {
             horses[laneNumber - 1] = theHorse;
@@ -43,97 +47,33 @@ public class Race {
         }
     }
 
-    /**
-     * Start the race
-     * The horse are brought to the start and
-     * then repeatedly moved forward until the
-     * race is finished
-     */
-    public void startRace() {
-        //declare a local variable to tell us when the race is finished
-        boolean finished = false;
-        //reset all the lanes (all horses not fallen and back to 0).
+    public long getCurrentTime() {
+        return System.currentTimeMillis();
+    }
 
-        for (Horse horse : horses) {
-            if (horse != null) {
-                horse.goBackToStart();
-            }
-        }
-
-        while (!finished) {
-            //move each horse
-            for (Horse horse : horses) {
-                if (horse != null) {
-                    moveHorse(horse);
-                }
-            }
-            //print the race positions
-            printRace();
-
-            //if any of the three horses has won the race is finished
-            if (raceWonBy()) {
-                printRace();
-                System.out.println(Objects.requireNonNull(getWinningHorse()).getName() + " has won the race!");
-                finished = true;
-                try {
-                    BufferedWriter resultsWriter = new BufferedWriter(new FileWriter("results.txt"));
-                    for (Horse horse : horses) {
-                        resultsWriter.write("Horse name: " + horse.getName() + ", Distance travelled: " + horse.getDistanceTravelled() + " units, " + "Symbol: " + horse.getSymbol());
-                        resultsWriter.newLine();
-                    }
-                    resultsWriter.write("WINNER HORSE: " + Objects.requireNonNull(getWinningHorse()).getName());
-                    resultsWriter.close();
-                }
-                catch (IOException e) {
-                    System.err.println("Error writing to results file. See error logs for more" );
-                    System.out.println();
-                    System.out.println(e);
-                }
-            }
-
-            if (allHorsesFallen()) {
-                furthestHorse();
-                finished = true;
-                try {
-                    BufferedWriter resultsWriter = new BufferedWriter(new FileWriter("results.txt"));
-                    for (Horse horse : horses) {
-                        System.out.println(horse.getDistanceTravelled());
-                        resultsWriter.write("Horse name: " + horse.getName() + ", Distance travelled: " + horse.getDistanceTravelled() + " units, " + "Symbol: " + horse.getSymbol());
-                        resultsWriter.newLine();
-                    }
-                    resultsWriter.write("WINNER HORSE: " + getFurthestHorse().getName());
-                    resultsWriter.close();
-                } catch (IOException e) {
-                    System.err.println("Error writing to results file. See error logs for more" );
-                    System.out.println();
-                    System.out.println(e);
-                }
-            }
-
-
-            //wait for 100 milliseconds
-            try {
-                TimeUnit.MILLISECONDS.sleep(100);
-            } catch (Exception e) {
-
-            }
-        }
-        try {
-            BufferedWriter horseData = new BufferedWriter(new FileWriter("horseData.txt"));
+    private BufferedWriter getBufferedWriter(boolean allHorseFallen) throws IOException {
+        BufferedWriter resultsWriter = new BufferedWriter(new FileWriter("results.txt"));
+        if (allHorseFallen) {
             int currentLine = 0;
-            for (Horse individualHorse : horses) {
-                horseData.write(individualHorse.getSymbol() + "," + individualHorse.getName() + "," + individualHorse.getConfidence() +"," + individualHorse.getHorseCoat());
+            for (Horse horse : horses) {
+                resultsWriter.write(horse.getName() + "," + horse.getDistanceTravelled() + "," + horse.getSymbol() + "," + horse.getHorseCoat() + "," + horse.getHorseBoots());
                 currentLine++;
                 if (currentLine < horses.length) {
-                    horseData.newLine();
+                    resultsWriter.newLine();
                 }
             }
-            horseData.close();
+            return resultsWriter;
         }
-        catch (IOException error) {
-            System.err.println("Error writing to state file.");
-            System.out.println("Unable to write to file!");
+        int currentLine = 0;
+
+        for (Horse horse : horses) {
+            resultsWriter.write(horse.getName() + "," + horse.getDistanceTravelled() + "," + horse.getSymbol() + "," + horse.getHorseCoat() + "," + horse.getHorseBoots());
+            currentLine++;
+            if (currentLine < horses.length) {
+                resultsWriter.newLine();
+            }
         }
+        return resultsWriter;
     }
 
 
@@ -155,15 +95,6 @@ public class Race {
         return true;
     }
 
-
-
-    /**
-     * Randomly make a horse move forward or fall depending
-     * on its confidence rating
-     * A fallen horse cannot move
-     *
-     * @param theHorse the horse to be moved
-     */
     private void moveHorse(Horse theHorse) {
         //if the horse has fallen it cannot move,
         //so only run if it has not fallen
@@ -202,78 +133,6 @@ public class Race {
         return false;
     }
 
-    /***
-     * Print the race on the terminal
-     */
-    private void printRace() {
-        System.out.print("\u000C");
-        clearScreen();
-        multiplePrint('=', raceLength + 3);
-        System.out.println();
-
-        for (Horse horse : horses) {
-            if (horse != null) {
-                printLane(horse);
-                System.out.println(" " + horse.getName() + " (Current confidence: " + horse.getConfidence() + ")" + " Coat: " + horse.getHorseCoat());
-            }
-        }
-
-        multiplePrint('=', raceLength + 3);
-        System.out.println();
-    }
-
-    /**
-     * print a horse's lane during the race
-     * for example
-     * |           X                      |
-     * to show how far the horse has run
-     */
-    private void printLane(Horse theHorse) {
-        //calculate how many spaces are needed before
-        //and after the horse
-        int spacesBefore = theHorse.getDistanceTravelled();
-        int spacesAfter = raceLength - theHorse.getDistanceTravelled();
-
-        //print a | for the beginning of the lane
-        System.out.print('|');
-
-        //print the spaces before the horse
-        multiplePrint(' ',spacesBefore);
-
-        //if the horse has fallen then print dead
-        //else print the horse's symbol
-        if(theHorse.hasFallen()) {
-            System.out.print('❌');
-        } else {
-            System.out.print(theHorse.getSymbol());
-        }
-
-        //print the spaces after the horse
-        multiplePrint(' ',spacesAfter);
-
-        //print the | for the end of the track
-        System.out.print("|");
-    }
-    /***
-     * print a character a given number of times.
-     * e.g. printmany('x',5) will print: xxxxx
-     *
-     * @param aChar the character to Print
-     */
-    private void multiplePrint(char aChar, int times) {
-        int i = 0;
-        while (i < times) {
-            System.out.print(aChar);
-            i = i + 1;
-        }
-    }
-
-    // Clears the screen properly so it can keep running
-    public static void clearScreen() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-    }
-
     public void furthestHorse() {
         int furthestDistance = 0;
         Horse furthestHorse = null;
@@ -286,8 +145,15 @@ public class Race {
         }
 
         if (furthestHorse != null) {
-            System.out.println(furthestHorse.getName() + " has won the race as it has travelled the furthest (" +  furthestHorse.getDistanceTravelled() + ")");
+            System.out.println(furthestHorse.getName() + " has won the race as it has travelled the furthest (" +  furthestHorse.getDistanceTravelled() + " blocks)");
         }
+    }
+
+    public boolean isHorseFallen(Horse horses) {
+        if (horses.hasFallen()) {
+            return true;
+        }
+        return false;
     }
 
     public Horse getFurthestHorse() {
@@ -300,5 +166,186 @@ public class Race {
             }
         }
         return furthestHorse;
+    }
+    ///////
+    //////
+    ///
+
+    private void updateRaceText() {
+        raceOutput.setText(""); // Clear previous text
+
+        raceOutput.append(String.format("%" + (raceLength + 3) + "s\n", "=".repeat(raceLength + 3)));
+
+        for (Horse horse : horses) {
+            if (horse != null) {
+                buildAndAppendLane(horse);
+                raceOutput.append(" " + horse.getName() + " (Current confidence: " + horse.getConfidence() + ")" + " Coat: " + horse.getHorseCoat() + " | [BOOTS] " + horse.getHorseBoots() + "\n");
+            }
+        }
+        raceOutput.append(String.format("%" + (raceLength + 3) + "s\n", "=".repeat(raceLength + 3)));
+    }
+
+    private void buildAndAppendLane(Horse horse) {
+        StringBuilder laneBuilder = new StringBuilder("|");
+
+        int spacesBefore = horse.getDistanceTravelled();
+        int spacesAfter = raceLength - horse.getDistanceTravelled();
+
+        for (int i = 0; i < spacesBefore; i++) {
+            laneBuilder.append(" ");
+        }
+
+        if (horse.hasFallen()) {
+            laneBuilder.append('❌');
+        } else {
+            laneBuilder.append(horse.getSymbol());
+        }
+
+        for (int i = 0; i < spacesAfter; i++) {
+            laneBuilder.append(" ");
+        }
+
+        laneBuilder.append("|");
+        raceOutput.append(laneBuilder.toString());
+    }
+
+
+    public void startRaceGUI(Point windowLocation) {
+        startTime = getCurrentTime();
+        boolean finished = false;
+
+        for (Horse horse : horses) {
+            if (horse != null) {
+                horse.goBackToStart();
+            }
+        }
+
+        // Create a new JFrame for the race window
+        JFrame raceWindow = new JFrame("Horse Race");
+        raceWindow.setLocation(windowLocation);
+        raceWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Add the JTextArea containing race output to a JScrollPane for scrolling
+        JScrollPane scrollPane = new JScrollPane(raceOutput);
+        scrollPane.setPreferredSize(new Dimension(1280, 720));
+
+        // Create a JPanel to hold the scroll pane
+        JPanel racePanel = new JPanel();
+        racePanel.setBackground(Color.LIGHT_GRAY);
+        racePanel.setLayout(new BorderLayout());
+        racePanel.add(scrollPane, BorderLayout.CENTER);
+        JButton mainMenuButton = new JButton("Main Menu");
+        mainMenuButton.addActionListener(e -> {
+                    // Reset the race state
+                    WindowFrame wf = new WindowFrame("Horse Simulator");
+                    Point raceWindowLocation = raceWindow.getLocation();
+
+                    raceWindow.dispose();
+                    wf.setLocation(raceWindowLocation);
+                    wf.setVisible(true);
+                });
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(mainMenuButton);
+        racePanel.add(buttonPanel, BorderLayout.SOUTH);
+
+
+        // Add the race panel to the JFrame
+        raceWindow.getContentPane().add(racePanel);
+
+        // Pack and set the window visible
+        raceWindow.pack();
+        raceWindow.setVisible(true);
+
+        while (!finished) {
+            // Move each horse
+            for (Horse horse : horses) {
+                if (horse != null) {
+                    moveHorse(horse);
+                }
+            }
+            // Update the JTextArea with the current race state
+            updateRaceText();
+            raceOutput.update(raceOutput.getGraphics());
+
+            try {
+                Thread.sleep(100);
+            } catch(Exception e) {
+                System.out.println(e);
+            }
+
+            // If any of the three horses has won the race is finished
+            if (raceWonBy()) {
+                endTime = getCurrentTime();
+                finishingTime = endTime - startTime;
+
+                updateRaceText();
+                System.out.println(Objects.requireNonNull(getWinningHorse()).getName() + " has won the race!");
+                finished = true;
+                raceOutput.append(Objects.requireNonNull(getWinningHorse()).getName() + " has won the race! (" + finishingTime + " milliseconds)");
+                raceOutput.append("\nGame ended - writing results to file ...");
+                openMainMenu = new JButton();
+                racePanel.add(openMainMenu);
+                openMainMenu.setVisible(true);
+
+                try {
+                    BufferedWriter resultsWriter = getBufferedWriter(allHorsesFallen());
+                    resultsWriter.close();
+                    try {
+                        BufferedWriter horseData = new BufferedWriter(new FileWriter("horseData.txt"));
+                        int currentLine = 0;
+                        for (Horse individualHorse : horses) {
+                            horseData.write(individualHorse.getSymbol() + "," + individualHorse.getName() + "," + individualHorse.getConfidence() +"," + individualHorse.getHorseCoat() + "," + individualHorse.getHorseBoots());
+                            currentLine++;
+                            if (currentLine < horses.length) {
+                                horseData.newLine();
+                            }
+                        }
+                        horseData.close();
+                    }
+                    catch (IOException error) {
+                        System.err.println("Error writing to state file.");
+                        System.out.println("Unable to write to file!");
+                    }
+                    System.out.println("The race ended in " + finishingTime + " milliseconds");
+                } catch (IOException e) {
+                    System.err.println("Error writing to results file. See error logs for more");
+                    System.out.println();
+                }
+            }
+
+            if (allHorsesFallen()) {
+                endTime = getCurrentTime();
+                finishingTime = endTime-startTime;
+                furthestHorse();
+                raceOutput.append(Objects.requireNonNull(getFurthestHorse()).getName() + " has won the race! (" + finishingTime + " milliseconds)");
+                raceOutput.append("\nGame ended - writing results to file ...");
+                finished = true;
+                try {
+                    BufferedWriter resultsWriter = getBufferedWriter(allHorsesFallen());
+                    resultsWriter.close();
+                }
+                catch (IOException e) {
+                    System.out.println(e);
+                }
+
+                try {
+                    BufferedWriter horseData = new BufferedWriter(new FileWriter("horseData.txt"));
+                    int currentLine = 0;
+                    for (Horse individualHorse : horses) {
+                        horseData.write(individualHorse.getSymbol() + "," + individualHorse.getName() + "," + individualHorse.getConfidence() +"," + individualHorse.getHorseCoat() + "," + individualHorse.getHorseBoots());
+                        currentLine++;
+                        if (currentLine < horses.length) {
+                            horseData.newLine();
+                        }
+                    }
+                    horseData.close();
+                }
+                catch (IOException error) {
+                    System.err.println("Error writing to state file.");
+                    System.out.println("Unable to write to file!");
+                }
+            }
+        }
     }
 }

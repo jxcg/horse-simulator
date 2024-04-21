@@ -1,2 +1,3 @@
-Horse name: horseA, Distance travelled: 28 units, Symbol: t
-WINNER HORSE: horseA
+Zappy-Horse,6,♕,Palomino,Greygreen
+Data-Horse,15,♞,Bay,Black
+Server-Horse,7,♘,Chestnut,White

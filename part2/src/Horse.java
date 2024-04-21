@@ -1,3 +1,4 @@
+import java.math.BigDecimal;
 import java.util.Scanner;
 
 /**
@@ -18,18 +19,20 @@ public class Horse {
     private boolean horseFell;
     private double horseConfidence; /* 0-1 */
     private String horseCoat;
-
+    private String horseBoots;
     // Constructor of class Horse
 
-    public Horse(char horseSymbol, String horseName, double horseConfidence, String horseCoat) {
+    public Horse(char horseSymbol, String horseName, double horseConfidence, String horseCoat, String horseBoots) {
         this.horseSymbol = horseSymbol;
         this.horseName = horseName;
         this.horseConfidence = horseConfidence;
         this.horseCoat = horseCoat;
+        this.horseBoots = horseBoots;
     }
 
-    public Horse() {
 
+    public Horse() {
+        // blank constructor
     }
     // Other methods of class Horse
 
@@ -90,5 +93,15 @@ public class Horse {
 
     public void setSymbol(char newSymbol) {
         this.horseSymbol = newSymbol;
+    }
+
+    public String getHorseBoots() {
+        return this.horseBoots;
+    }
+
+    public void setHorseBoots(String input) {
+        if (input != null && !input.isEmpty()) {
+            this.horseBoots = input;
+        }
     }
 }
