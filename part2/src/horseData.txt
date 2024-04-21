@@ -1,3 +1,0 @@
-♕,Zappy-Horse,0.36,Palomino,Greygreen
-♞,Data-Horse,0.6,Bay,Black
-♘,Server-Horse,0.5,Chestnut,White

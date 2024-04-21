@@ -1,6 +1,3 @@
-import java.math.BigDecimal;
-import java.util.Scanner;
-
 /**
  *
  * The Horse class is in charge of instantiating the Horse object,
