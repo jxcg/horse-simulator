@@ -1,4 +1,4 @@
-<img width="1299" alt="Screenshot 2024-04-22 at 18 46 33" src="https://github.com/jxcg/horse-simulator/assets/154761377/1ba16940-0c0e-485e-be12-df2ea0489102"># Horse Simulator
+# Horse Simulator
 **Author:** Joshua Cameron Ng
 
 This is a University project as part of coursework for Object Oriented Programming.
