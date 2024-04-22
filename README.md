@@ -1,5 +1,4 @@
-<img width="547" alt="Screenshot 2024-04-22 at 18 27 13" src="https://github.com/jxcg/horse-simulator/assets/154761377/0128251c-6d2a-4d24-a6da-d7b4e06e4201"># horse-simulator
-
+<img width="1299" alt="Screenshot 2024-04-22 at 18 46 33" src="https://github.com/jxcg/horse-simulator/assets/154761377/1ba16940-0c0e-485e-be12-df2ea0489102"># Horse Simulator
 **Author:** Joshua Cameron Ng
 
 This is a University project as part of coursework for Object Oriented Programming.
@@ -105,5 +104,10 @@ A comprehensive betting system is integrated into the game, allowing players to 
 ## 7. Interactive UI
 An intuitive, responsive UI makes the horse-simulator even more fun!
 <img width="1293" alt="Screenshot 2024-04-21 at 13 06 44" src="https://github.com/jxcg/horse-simulator/assets/154761377/1e2cc55c-0570-43c1-86dd-b6ecee3a53a0">
-
+-
+<img width="1303" alt="Screenshot 2024-04-22 at 18 46 16" src="https://github.com/jxcg/horse-simulator/assets/154761377/051b728f-74c6-4dc6-b50f-19ad0dbd728d">
+-
+<img width="1308" alt="Screenshot 2024-04-22 at 18 46 41" src="https://github.com/jxcg/horse-simulator/assets/154761377/c651f183-d30b-40c6-bdbc-ca9344aafa28">
+-
+<img width="701" alt="Screenshot 2024-04-22 at 18 46 52" src="https://github.com/jxcg/horse-simulator/assets/154761377/ea390064-e830-4db5-b3a2-df7a34ee38b0">
 
