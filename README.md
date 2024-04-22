@@ -1,4 +1,4 @@
-# horse-simulator
+<img width="547" alt="Screenshot 2024-04-22 at 18 27 13" src="https://github.com/jxcg/horse-simulator/assets/154761377/0128251c-6d2a-4d24-a6da-d7b4e06e4201"># horse-simulator
 
 **Author:** Joshua Cameron Ng
 
@@ -33,7 +33,8 @@ Notable Logs:
 - Clone repository, if there are no classes available, please use 'javac File.java' to compile the available java files provided within the src/ folder
 - Run "java Main.java" to produce expected results
 - Example of a game:
-<img width="522" alt="Screenshot 2024-04-21 at 13 06 00" src="https://github.com/jxcg/horse-simulator/assets/154761377/3216f12c-0805-4fb8-aeb3-a39748dfb7bc">
+
+<img width="547" alt="Screenshot 2024-04-22 at 18 27 13" src="https://github.com/jxcg/horse-simulator/assets/154761377/46e9cdd2-6c4c-4cc0-abbf-03294dbb1365">
 
 
 
