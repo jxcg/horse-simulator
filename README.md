@@ -1,5 +1,4 @@
-# horse-simulator
-
+# Horse Simulator
 **Author:** Joshua Cameron Ng
 
 This is a University project as part of coursework for Object Oriented Programming.
@@ -33,7 +32,8 @@ Notable Logs:
 - Clone repository, if there are no classes available, please use 'javac File.java' to compile the available java files provided within the src/ folder
 - Run "java Main.java" to produce expected results
 - Example of a game:
-<img width="522" alt="Screenshot 2024-04-21 at 13 06 00" src="https://github.com/jxcg/horse-simulator/assets/154761377/3216f12c-0805-4fb8-aeb3-a39748dfb7bc">
+
+<img width="547" alt="Screenshot 2024-04-22 at 18 27 13" src="https://github.com/jxcg/horse-simulator/assets/154761377/46e9cdd2-6c4c-4cc0-abbf-03294dbb1365">
 
 
 
@@ -104,5 +104,8 @@ A comprehensive betting system is integrated into the game, allowing players to 
 ## 7. Interactive UI
 An intuitive, responsive UI makes the horse-simulator even more fun!
 <img width="1293" alt="Screenshot 2024-04-21 at 13 06 44" src="https://github.com/jxcg/horse-simulator/assets/154761377/1e2cc55c-0570-43c1-86dd-b6ecee3a53a0">
-
+-
+<img width="1303" alt="Screenshot 2024-04-22 at 18 46 16" src="https://github.com/jxcg/horse-simulator/assets/154761377/051b728f-74c6-4dc6-b50f-19ad0dbd728d">
+-
+<img width="701" alt="Screenshot 2024-04-22 at 18 46 52" src="https://github.com/jxcg/horse-simulator/assets/154761377/ea390064-e830-4db5-b3a2-df7a34ee38b0">
 
