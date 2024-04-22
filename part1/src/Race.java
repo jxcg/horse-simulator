@@ -195,6 +195,7 @@ public class Race {
         //else print the horse's symbol
         if(theHorse.hasFallen()) {
             System.out.print('❌');
+            spacesAfter = spacesAfter-1;
         } else {
             System.out.print(theHorse.getSymbol());
         }
