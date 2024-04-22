@@ -107,7 +107,5 @@ An intuitive, responsive UI makes the horse-simulator even more fun!
 -
 <img width="1303" alt="Screenshot 2024-04-22 at 18 46 16" src="https://github.com/jxcg/horse-simulator/assets/154761377/051b728f-74c6-4dc6-b50f-19ad0dbd728d">
 -
-<img width="1308" alt="Screenshot 2024-04-22 at 18 46 41" src="https://github.com/jxcg/horse-simulator/assets/154761377/c651f183-d30b-40c6-bdbc-ca9344aafa28">
--
 <img width="701" alt="Screenshot 2024-04-22 at 18 46 52" src="https://github.com/jxcg/horse-simulator/assets/154761377/ea390064-e830-4db5-b3a2-df7a34ee38b0">
 
