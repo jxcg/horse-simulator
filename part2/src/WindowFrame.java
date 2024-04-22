@@ -122,7 +122,7 @@ public class WindowFrame extends JFrame implements ActionListener {
         // opens dialog for the user to place a bet
         System.out.println(betAmount);
         if (betAmount <= 0) {
-            String betAmountString = JOptionPane.showInputDialog("Enter bet amount (you have " + VirtualCurrency.getCurrency() + " coins):");
+            String betAmountString = JOptionPane.showInputDialog(this, "Enter bet amount (you have " + VirtualCurrency.getCurrency() + " coins):");
             if (betAmountString != null && this.customHorses != null) {
                 try {
                     double betAmountConfirmation = Double.parseDouble(betAmountString);
@@ -252,7 +252,7 @@ public class WindowFrame extends JFrame implements ActionListener {
         }
 
         if (e.getSource() == customiseTrackLengthButton) {
-            String raceLengthAsString = JOptionPane.showInputDialog("Enter race track length: (Default is 15)");
+            String raceLengthAsString = JOptionPane.showInputDialog(this, "Enter race track length: (Default is 15)");
             if (raceLengthAsString == null) {
                 System.out.println("Defaulting to length: " + raceLengthDistance);
                 JOptionPane.showMessageDialog(this, "Operation cancelled, defaulting to 15");
@@ -443,20 +443,20 @@ public class WindowFrame extends JFrame implements ActionListener {
         else if (e.getSource() == customiseButton) {
             System.out.println("clicked");
             try {
-                String tracksAsString = JOptionPane.showInputDialog("Enter how many tracks you want: ");
+                String tracksAsString = JOptionPane.showInputDialog(this, "Enter how many tracks you want: ");
                 if (tracksAsString != null) {
                     int tracks = Integer.parseInt(tracksAsString);
                     customHorses = new Horse[tracks];
                     for (int i = 0; i<customHorses.length; i++) {
 
-                        horseName = JOptionPane.showInputDialog("Enter the name of your horse " + "(" + (i+1) +")");
+                        horseName = JOptionPane.showInputDialog(this, "Enter the name of your horse " + "(" + (i+1) +")");
                         if (horseName == null || horseName.isEmpty()) {
                             // user cancelled operation
                             JOptionPane.showMessageDialog(this, "Aborting Customisation");
                             customHorses = null;
                             break;
                         }
-                        String confidenceRatingInput = JOptionPane.showInputDialog("Enter " + horseName + "'s confidence rating");
+                        String confidenceRatingInput = JOptionPane.showInputDialog(this, "Enter " + horseName + "'s confidence rating");
                         if (confidenceRatingInput == null || confidenceRatingInput.isEmpty() || !isValidNumber(confidenceRatingInput)) {
                             JOptionPane.showMessageDialog(this, "Aborting Customisation");
                             customHorses = null;
@@ -465,7 +465,7 @@ public class WindowFrame extends JFrame implements ActionListener {
                         }
                         try {
                             confidenceRating = Double.parseDouble(confidenceRatingInput);
-                            symbol = JOptionPane.showInputDialog("What should " + horseName + " be represented by? " + "(" + (i+1) +")");
+                            symbol = JOptionPane.showInputDialog(this, "What should " + horseName + " be represented by? " + "(" + (i+1) +")");
                             if (symbol == null || symbol.isEmpty()) {
                                 JOptionPane.showMessageDialog(this, "Aborting Customisation");
                                 customHorses = null;
