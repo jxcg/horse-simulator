@@ -193,6 +193,7 @@ public class Race {
 
         if (horse.hasFallen()) {
             laneBuilder.append('❌');
+            spacesAfter = spacesAfter-1;
         } else {
             laneBuilder.append(horse.getSymbol());
         }
