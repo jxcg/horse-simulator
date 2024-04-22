@@ -103,9 +103,12 @@ A comprehensive betting system is integrated into the game, allowing players to 
 
 ## 7. Interactive UI
 An intuitive, responsive UI makes the horse-simulator even more fun!
-<img width="1293" alt="Screenshot 2024-04-21 at 13 06 44" src="https://github.com/jxcg/horse-simulator/assets/154761377/1e2cc55c-0570-43c1-86dd-b6ecee3a53a0">
--
-<img width="1303" alt="Screenshot 2024-04-22 at 18 46 16" src="https://github.com/jxcg/horse-simulator/assets/154761377/051b728f-74c6-4dc6-b50f-19ad0dbd728d">
--
-<img width="701" alt="Screenshot 2024-04-22 at 18 46 52" src="https://github.com/jxcg/horse-simulator/assets/154761377/ea390064-e830-4db5-b3a2-df7a34ee38b0">
+<img width="1489" alt="Screenshot 2024-04-22 at 18 49 09" src="https://github.com/jxcg/horse-simulator/assets/154761377/58b64f4b-ce65-4739-9572-d4226dbbf221">
+<img width="1504" alt="Screenshot 2024-04-22 at 18 49 18" src="https://github.com/jxcg/horse-simulator/assets/154761377/58b2c2c3-f42f-455c-bc7b-91f05238f54f">
+<img width="1350" alt="Screenshot 2024-04-22 at 18 49 27" src="https://github.com/jxcg/horse-simulator/assets/154761377/c003a964-6a03-428f-8295-13e9846a1914">
+<img width="1438" alt="Screenshot 2024-04-22 at 18 49 43" src="https://github.com/jxcg/horse-simulator/assets/154761377/98f41685-39e8-4962-aa18-f69843c33258">
+<img width="1487" alt="Screenshot 2024-04-22 at 18 49 49" src="https://github.com/jxcg/horse-simulator/assets/154761377/504cb9cd-4cc6-4f3a-895c-43262cf54327">
+<img width="1589" alt="Screenshot 2024-04-22 at 18 49 54" src="https://github.com/jxcg/horse-simulator/assets/154761377/9b45000b-4738-45b9-8ac2-3eb6e80695bb">
+<img width="1586" alt="Screenshot 2024-04-22 at 18 49 58" src="https://github.com/jxcg/horse-simulator/assets/154761377/fb7df1dc-d3ba-46a9-ab08-11016e902335">
+
 
